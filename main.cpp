@@ -52,104 +52,104 @@ int main() {
     vec3 spherePos = vec3(0, 0, 0);
     vec3 spherePos2 = vec3(-4, 0, 0);
     vec3 spherePos1 = vec3(7, 0, 0);
-		vec3 boxPos = vec3(0, 0, -4);
+    vec3 boxPos = vec3(0, 0, -4);
 
 
-        for (int j = 0; j < height; ++j) {
-            for (int i = 0; i < width; ++i) {
+    for (int j = 0; j < height; ++j) {
+        for (int i = 0; i < width; ++i) {
 
-                vec2 uv = (vec2(i, j) / vec2(width, height)) * 2.0f - 1.0f;
-                uv.x *= aspect * pixelAspect;
+            vec2 uv = (vec2(i, j) / vec2(width, height)) * 2.0f - 1.0f;
+            uv.x *= aspect * pixelAspect;
 
-                // Camera
-                vec3 ro = vec3(-10, 0, 0);
-                vec3 rd = norm(vec3(1, uv));
+            // Camera
+            vec3 ro = vec3(-10, 0, 0);
+            vec3 rd = norm(vec3(1, uv));
 
-                // Rotate the camerа
-				        ro = rotateX(ro, 0.25);
-                ro = rotateY(ro, 0.25);
-                rd = rotateY(rd, 0.25);
+            // Rotate the camerа
+	    ro = rotateX(ro, 0.25);
+            ro = rotateY(ro, 0.25);
+            rd = rotateY(rd, 0.25);
               
-                // ro = rotateZ(ro, t * 0.02);
-                // rd = rotateZ(rd, t * 0.02);
+            // ro = rotateZ(ro, t * 0.02);
+            // rd = rotateZ(rd, t * 0.02);
               
-                // Initialization intersection
-				        vec2 intersection = sphere(ro - spherePos, rd, 2);
+            // Initialization intersection
+	    vec2 intersection = sphere(ro - spherePos, rd, 2);
 				
-				        for (int k = 0; k < 5; k++) {
-                    // Objects
+	    for (int k = 0; k < 5; k++) {
+                // Objects
 
-                    // Sphere
-                    // Change "spherePos" to your other position
-					          intersection = sphere(ro - spherePos, rd, 2);
-					          if (intersection.x > 0 && intersection.x < dist) {
-						            dist = intersection.x;
-                        vec3 itPoint = ro - spherePos + rd * dist;
-                        minIt = intersection.x;
-                        n = norm(itPoint);
-					          }
+                // Sphere
+                // Change "spherePos" to your other position
+		intersection = sphere(ro - spherePos, rd, 2);
+		if (intersection.x > 0 && intersection.x < dist) {
+		    dist = intersection.x;
+                    vec3 itPoint = ro - spherePos + rd * dist;
+                    minIt = intersection.x;
+                    n = norm(itPoint);
+		}
 					
-					          intersection = sphere(ro - spherePos2, rd,	1);
-					          if (intersection.x > 0 && intersection.x < dist) {
-					        	    dist = intersection.x;
-						            n = n3;
-                        vec3 itPoint = ro - spherePos2 + rd * dist;
-                        minIt = intersection.x;
-                        n = norm(itPoint);
-                    }
+	        intersection = sphere(ro - spherePos2, rd, 1);
+		if (intersection.x > 0 && intersection.x < dist) {
+		    dist = intersection.x;
+		    n = n3;
+                    vec3 itPoint = ro - spherePos2 + rd * dist;
+                    minIt = intersection.x;
+                    n = norm(itPoint);
+                }
 
-                    // A box
-					          intersection = box(ro - boxPos, rd,	1,2,1, n4);
-					          if (intersection.x > 0 && intersection.x < dist) {
-						            dist = intersection.x;
-						            n = n4;
-                        vec3 itPoint = ro - boxPos + rd * dist;
-                        minIt = intersection.x;
-                        n = norm(itPoint);
-                    }
+                // Box
+		intersection = box(ro - boxPos, rd, 1,2,1, n4);
+		if (intersection.x > 0 && intersection.x < dist) {
+		    dist = intersection.x;
+		    n = n4;
+                    vec3 itPoint = ro - boxPos + rd * dist;
+                    minIt = intersection.x;
+                    n = norm(itPoint);
+                }
                   
-					          intersection = sphere(ro - spherePos1, rd,	1);
-					          if (intersection.x > 0 && intersection.x < dist) {
-					              dist = intersection.x;
-						            n = n1;
-                        vec3 itPoint = ro - spherePos1 + rd * dist;
-                        minIt = intersection.x;
-                        n = norm(itPoint);
-                    }
+		intersection = sphere(ro - spherePos1, rd,	1);
+		if (intersection.x > 0 && intersection.x < dist) {
+		    dist = intersection.x;
+		    n = n1;
+                    vec3 itPoint = ro - spherePos1 + rd * dist;
+                    minIt = intersection.x;
+                    n = norm(itPoint);
+                }
+		    
+                // A plane
+		intersection = plane(ro, rd, vec3(0, 0, -1), 1);
+		if (intersection.x > 0) {
+		    float planeDist = intersection.x;
+		    if (planeDist < minIt) {
+			minIt = planeDist;
+			n = vec3(0, 0, -1);
+			albedo = 0.5;
+			}
+		}
 
-
-                    // A plane
-					          intersection = plane(ro, rd, vec3(0, 0, -1), 1);
-					          if (intersection.x > 0) {
-						            float planeDist = intersection.x;
-						            if (planeDist < minIt) {
-							              minIt = planeDist;
-							              n = vec3(0, 0, -1);
-							              albedo = 0.5;
-						            }
-					          }
-
-					          if (minIt < 99999) {
-                        diffuse *= (dot(n, light) * 0.5 + 0.5) * albedo;
-                        ro = ro + rd * (minIt - 0.01);
-                    } 
+		if (minIt < 99999) {
+                    diffuse *= (dot(n, light) * 0.5 + 0.5) * albedo;
+                    ro = ro + rd * (minIt - 0.01);
+		} 
 					
-					          if (minIt < 99998) {
-						            rd = reflect(rd, n);
-					          }
-					          else break;
-				        }
+	        if (minIt < 99998) {
+		    rd = reflect(rd, n);
+		}
+		else break;
+            }
+
 
 				
-                int color = (int)(diffuse * 11); // Change the diffuse if you need it
-                color = clamp(color, 0, gradientSize);
-                char pixel = gradient[color];
-                screen[i + j * width] = pixel;
+            int color = (int)(diffuse * 11); // Change the diffuse if you need it
+            color = clamp(color, 0, gradientSize);
+            char pixel = gradient[color];
+            screen[i + j * width] = pixel;
             }
         }
 		printf("%s", screen);
     }
-	getchar();
+  getchar();
   delete[] screen;
   return 0;
 }
