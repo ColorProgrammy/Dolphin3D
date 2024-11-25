@@ -74,69 +74,70 @@ int main() {
             // rd = rotateZ(rd, t * 0.02);
               
             // Initialization intersection
-	    vec2 intersection = sphere(ro - spherePos, rd, 2);
+	        vec2 intersection = sphere(ro - spherePos, rd, 2);
 				
-	    for (int k = 0; k < 5; k++) {
+	        for (int k = 0; k < 5; k++) {
                 // Objects
 
                 // Sphere
                 // Change "spherePos" to your other position
-		intersection = sphere(ro - spherePos, rd, 2);
-		if (intersection.x > 0 && intersection.x < dist) {
-		    dist = intersection.x;
+		        intersection = sphere(ro - spherePos, rd, 2);
+		        if (intersection.x > 0 && intersection.x < dist) {
+		            dist = intersection.x;
                     vec3 itPoint = ro - spherePos + rd * dist;
                     minIt = intersection.x;
                     n = norm(itPoint);
-		}
+		        }
 					
-	        intersection = sphere(ro - spherePos2, rd, 1);
-		if (intersection.x > 0 && intersection.x < dist) {
-		    dist = intersection.x;
-		    n = n3;
+	            intersection = sphere(ro - spherePos2, rd, 1);
+		        if (intersection.x > 0 && intersection.x < dist) {
+		            dist = intersection.x;
+		            n = n3;
                     vec3 itPoint = ro - spherePos2 + rd * dist;
                     minIt = intersection.x;
                     n = norm(itPoint);
                 }
 
                 // Box
-		intersection = box(ro - boxPos, rd, 1,2,1, n4);
-		if (intersection.x > 0 && intersection.x < dist) {
-		    dist = intersection.x;
-		    n = n4;
+		        intersection = box(ro - boxPos, rd, 1,2,1, n4);
+		        if (intersection.x > 0 && intersection.x < dist) {
+		            dist = intersection.x;
+		            n = n4;
                     vec3 itPoint = ro - boxPos + rd * dist;
                     minIt = intersection.x;
                     n = norm(itPoint);
                 }
                   
-		intersection = sphere(ro - spherePos1, rd,	1);
-		if (intersection.x > 0 && intersection.x < dist) {
-		    dist = intersection.x;
-		    n = n1;
+		        intersection = sphere(ro - spherePos1, rd,	1);
+		        if (intersection.x > 0 && intersection.x < dist) {
+		            dist = intersection.x;
+		            n = n1;
                     vec3 itPoint = ro - spherePos1 + rd * dist;
                     minIt = intersection.x;
                     n = norm(itPoint);
                 }
 		    
                 // A plane
-		intersection = plane(ro, rd, vec3(0, 0, -1), 1);
-		if (intersection.x > 0) {
-		    float planeDist = intersection.x;
-		    if (planeDist < minIt) {
-			minIt = planeDist;
-			n = vec3(0, 0, -1);
-			albedo = 0.5;
-			}
-		}
+		        intersection = plane(ro, rd, vec3(0, 0, -1), 1);
+		        if (intersection.x > 0) {
+		            float planeDist = intersection.x;
+		            if (planeDist < minIt) {
+			            minIt = planeDist;
+			            n = vec3(0, 0, -1);
+			            albedo = 0.5;
+			        }
+		        }
 
-		if (minIt < 99999) {
+		        if (minIt < 99999) {
                     diffuse *= (dot(n, light) * 0.5 + 0.5) * albedo;
                     ro = ro + rd * (minIt - 0.01);
-		} 
+		        } 
 					
-	        if (minIt < 99998) {
-		    rd = reflect(rd, n);
-		}
-		else break;
+	            if (minIt < 99998) {
+		            rd = reflect(rd, n);
+		        }
+					
+		        else break;
             }
 
 
@@ -147,7 +148,7 @@ int main() {
             screen[i + j * width] = pixel;
             }
         }
-		printf("%s", screen);
+	printf("%s", screen);
     }
   getchar();
   delete[] screen;
