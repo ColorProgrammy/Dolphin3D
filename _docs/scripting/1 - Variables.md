@@ -3,9 +3,6 @@
 Hello!
 Now we'll deal with variables.
 
-First you need to setup the DolphinEngine (see _setup.txt).
-
-It is recommended that you know at least basic C++.
 ----------------------------
 Well, we need to get acquainted with the code.
 
@@ -83,6 +80,8 @@ There may be different numbers of them, depending on the number of objects.
 They are needed so that objects have light and shadow.
 
 > In the very first object (no matter which one), it is not necessary to specify a new variable. In this case, we have a variable n. In other cases, in the object code, n = <variable> is written; where <variable> is a new variable.
+
+**Do not delete the variable "n" under any circumstances!!!**
 
 ---
 Lighting
