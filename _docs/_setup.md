@@ -7,7 +7,7 @@ I recommend downloading Visual C++ Studio 2008, as all the code was written in i
 
 Next you will need to add the solution to your Visual Studio.
 
-Then you will need to write the script itself in main.cpp (see script.txt).
+Then you will need to write the script itself in main.cpp.
 
 Next you need to right-click on the project in Solution Explorer and click Build.
 After this, the Debug folder will appear, where the compiled application is located.
