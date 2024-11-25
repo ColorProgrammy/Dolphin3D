@@ -9,8 +9,14 @@
 // Variables //
 
 // Screen size
-int width = 132;
-int height = 31;
+//
+// I do not recommend setting values 
+// higher than 132 and 31, 
+// as the image will not be displayed correctly.
+//
+
+int width = 120;
+int height = 30;
 
 // Aspect
 float aspect = (float)width / height;
