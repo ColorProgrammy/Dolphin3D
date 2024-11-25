@@ -35,7 +35,7 @@ float diffuse = 1;
 int main() {
   // Screen setup
   SetConsoleTitleA("DolphinEngine");
-	system("mode con cols=132 lines=31");
+  system("mode con cols=132 lines=31");
 
   // Gradient
   char gradient[] = " .,:!/rH$#@";
@@ -47,11 +47,11 @@ int main() {
   for (int t = 0; t < 10000000000000; ++t) {
     
     // Positions
-		vec3 light = norm(vec3(-0.5, 0.5, -1.0));
+    vec3 light = norm(vec3(-0.5, 0.5, -1.0));
     
     vec3 spherePos = vec3(0, 0, 0);
-		vec3 spherePos2 = vec3(-4, 0, 0);
-		vec3 spherePos1 = vec3(7, 0, 0);
+    vec3 spherePos2 = vec3(-4, 0, 0);
+    vec3 spherePos1 = vec3(7, 0, 0);
 		vec3 boxPos = vec3(0, 0, -4);
 
 
