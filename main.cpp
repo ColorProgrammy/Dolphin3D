@@ -23,7 +23,7 @@ int height = 30;
 float aspect = (float)width / height;
 float pixelAspect = 8.0f / 16.0f;
 
-// Objects
+// Render
 float minIt = 99999;
 float dist = 1e9;
 
@@ -33,7 +33,7 @@ vec3 n2 = 0;
 vec3 n3 = 0;
 vec3 n4 = 0
 
-// Light
+// Lighting
 float albedo = 1.2;
 float brightness = 1;
 
