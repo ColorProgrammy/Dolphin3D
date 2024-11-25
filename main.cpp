@@ -41,7 +41,7 @@ float diffuse = 1;
 int main() {
   // Screen setup
   SetConsoleTitleA("DolphinEngine");
-  system("mode con cols=132 lines=31");
+  system("mode con cols=120 lines=30");
 
   // Gradient
   char gradient[] = " .,:!/rH$#@";
@@ -70,14 +70,6 @@ int main() {
             // Camera
             vec3 ro = vec3(-10, 0, 0);
             vec3 rd = norm(vec3(1, uv));
-
-            // Rotate the camerа
-	        ro = rotateX(ro, 0.25);
-            ro = rotateY(ro, 0.25);
-            rd = rotateY(rd, 0.25);
-              
-            // ro = rotateZ(ro, t * 0.02);
-            // rd = rotateZ(rd, t * 0.02);
               
             // Initialization intersection
 	        vec2 intersection = sphere(ro - spherePos, rd, 2);
