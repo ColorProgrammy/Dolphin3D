@@ -66,7 +66,7 @@ int main() {
             vec3 rd = norm(vec3(1, uv));
 
             // Rotate the camerа
-	    ro = rotateX(ro, 0.25);
+	        ro = rotateX(ro, 0.25);
             ro = rotateY(ro, 0.25);
             rd = rotateY(rd, 0.25);
               
