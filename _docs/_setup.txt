@@ -15,11 +15,8 @@ After this, the Debug folder will appear, where the compiled application is loca
 ----
 
 The include folder is responsible for libraries for the correct operation of the application or game.
-
 The _docs folder contains text files for help and assistance in the graphics engine.
-
 The templates folder contains test projects. They are mainly needed for help, references, and for testing itself.
-
 The Debug file contains the compiled project itself. (when it appears, at first it won't be there)
 
 ----
