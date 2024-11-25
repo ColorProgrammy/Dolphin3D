@@ -14,6 +14,7 @@
 // higher than 132 and 31, 
 // as the image will not be displayed correctly.
 //
+//////////////
 
 int width = 120;
 int height = 30;
@@ -34,7 +35,7 @@ vec3 n4 = 0
 
 // Light
 float albedo = 1.2;
-float diffuse = 1;
+float brightness = 1;
 
 /////////
 
@@ -56,8 +57,6 @@ int main() {
     vec3 light = norm(vec3(-0.5, 0.5, -1.0));
     
     vec3 spherePos = vec3(0, 0, 0);
-    vec3 spherePos2 = vec3(-4, 0, 0);
-    vec3 spherePos1 = vec3(7, 0, 0);
     vec3 boxPos = vec3(0, 0, -4);
 
 
@@ -127,7 +126,7 @@ int main() {
 		        }
 
 		        if (minIt < 99999) {
-                    diffuse *= (dot(n, light) * 0.5 + 0.5) * albedo;
+                    brightness *= (dot(n, light) * 0.5 + 0.5) * albedo;
                     ro = ro + rd * (minIt - 0.01);
 		        } 
 					
@@ -140,7 +139,7 @@ int main() {
 
 
 				
-            int color = (int)(diffuse * 11); // Change the diffuse if you need it
+            int color = (int)(brightness * 10);
             color = clamp(color, 0, gradientSize);
             char pixel = gradient[color];
             screen[i + j * width] = pixel;
