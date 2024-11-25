@@ -85,36 +85,18 @@ int main() {
                     minIt = intersection.x;
                     n = norm(itPoint);
 		        }
-					
-	            intersection = sphere(ro - spherePos2, rd, 1);
-		        if (intersection.x > 0 && intersection.x < dist) {
-		            dist = intersection.x;
-		            n = n3;
-                    vec3 itPoint = ro - spherePos2 + rd * dist;
-                    minIt = intersection.x;
-                    n = norm(itPoint);
-                }
 
                 // Box
-		        intersection = box(ro - boxPos, rd, 1,2,1, n4);
-		        if (intersection.x > 0 && intersection.x < dist) {
-		            dist = intersection.x;
-		            n = n4;
-                    vec3 itPoint = ro - boxPos + rd * dist;
-                    minIt = intersection.x;
-                    n = norm(itPoint);
-                }
-                  
-		        intersection = sphere(ro - spherePos1, rd,	1);
+		        intersection = box(ro - boxPos, rd, 1,2,1, n1);
 		        if (intersection.x > 0 && intersection.x < dist) {
 		            dist = intersection.x;
 		            n = n1;
-                    vec3 itPoint = ro - spherePos1 + rd * dist;
+                    vec3 itPoint = ro - boxPos + rd * dist;
                     minIt = intersection.x;
                     n = norm(itPoint);
-                }
+				}
 		    
-                // A plane
+                // Plane
 		        intersection = plane(ro, rd, vec3(0, 0, -1), 1);
 		        if (intersection.x > 0) {
 		            float planeDist = intersection.x;
