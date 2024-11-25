@@ -98,5 +98,5 @@ With albedo it's a little different. It is responsible for the white color in ob
 
 ---
 
-Now you know what these variables represent!
----
+## Now you know what these variables represent!
+
