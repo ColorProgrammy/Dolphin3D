@@ -1,6 +1,6 @@
 DolphinEngine
 --
-Setup the DolphinEngine
+### Setup the DolphinEngine
 
 First you need to download Visual Studio to compile the project.
 I recommend downloading Visual C++ Studio 2008, as all the code was written in it.
