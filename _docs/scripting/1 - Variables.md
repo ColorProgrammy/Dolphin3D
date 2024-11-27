@@ -45,7 +45,7 @@ These variables are responsible for the screen size (or more precisely, what res
 
 If you bring the screen to maximazed or change it somehow, then, everything will fall apart.
 
-> It is NOT RECOMMENDED to set values higher than 131 and 31, as the image will not be displayed correctly.
+> It is NOT RECOMMENDED to set values higher than 132 and 31, as the image will not be displayed correctly.
 
 ---
 Aspect
