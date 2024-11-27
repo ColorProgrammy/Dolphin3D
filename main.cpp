@@ -45,7 +45,7 @@ int main() {
   system("mode con cols=120 lines=30");
 
   // Gradient
-  char gradient[] = " .,:!/rH$#@";
+  char gradient[] = " .:,!/rH#$@";
   int gradientSize = strlen(gradient) - 1;
 
   char* screen = new char[width * height + 1];
