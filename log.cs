@@ -22,26 +22,23 @@ class Program
     {
         var keywordsMessages = new Dictionary<string, string>
         {
+
+            
             { "RotateX", "RotateX command begins." },
             { "RotateY", "RotateY command begins." },
             { "RotateZ", "RotateZ command begins." },
             { "Vector2.h", "Vector2.h library loaded" },
             { "Vector3.h", "Vector3.h library loaded" },
             { "int Width", "The Width variable is set" },
-            { "Vector3.h", "Vector3.h library loaded" },
-            { "Vector3.h", "Vector3.h library loaded" },
-            { "Vector3.h", "Vector3.h library loaded" },
-            { "Vector3.h", "Vector3.h library loaded" },
-            { "Vector3.h", "Vector3.h library loaded" },
-            { "Vector3.h", "Vector3.h library loaded" },
-            { "Vector3.h", "Vector3.h library loaded" },
-            { "Vector3.h", "Vector3.h library loaded" },
-            { "Vector3.h", "Vector3.h library loaded" },
-            { "Vector3.h", "Vector3.h library loaded" },
-            { "Vector3.h", "Vector3.h library loaded" },
-            { "Vector3.h", "Vector3.h library loaded" },
-            { "Vector3.h", "Vector3.h library loaded" },
-            { "Vector3.h", "Vector3.h library loaded" }
+            { "vec3 n", "Variable n is created." },
+            { "SetConsoleTitleA", "The console name is specified" },
+            { "int Height", "The Height variable is set" },
+            { "system", "The console size is indicated" },
+            { "char gradient[]", "Gradient is specified" },
+            { "char* screen", "The variable screen has been added" },
+            { "vec3 light", "The light and its position were added" }
+
+            
         };
 
         string content = File.ReadAllText(filePath);
