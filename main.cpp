@@ -1,9 +1,9 @@
 #include <iostream>
 #include <cstring>
 #include <cmath>
-#include "Vector2.h"
-#include "Vector3.h"
-#include "functions.h"
+#include "../include/Vectors/Vector2.h"
+#include "../include/Vectors/Vector3.h"
+#include "../include/functions.h"
 #include <windows.h>
 
 // Variables //
