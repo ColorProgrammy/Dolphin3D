@@ -1,13 +1,24 @@
+/*
+File: functions.h
+Developer: ColorProgrammy
+
+Description:
+Functions for engine operation
+*/
+
+// Please do not change this code!
+
 #pragma once
-
-#include <algorithm>
-#include "Vector2.h"
-#include "Vector3.h"
+#include "Vector2.h" // ----\
+                             |=== Vectors
+#include "Vector3.h" // ----/
 #include <cmath>
+#include <algorithm>
 
+// Mathematical functions
 
-float dot(vec3 const& a, vec3 const& b) { 
-    return a.x * b.x + a.y * b.y + a.z * b.z; 
+int clamp(int value, int min, int max) { 
+    return std::max(std::min(value, max), min);
 }
 
 double sign(double a) { 
@@ -26,10 +37,6 @@ float length(vec2 const& v) {
     return sqrt(v.x * v.x + v.y * v.y); 
 }
 
-int clamp(int value, int min, int max) {
-    return std::max(std::min(value, max), min);
-}
-
 vec3 abs(vec3 const& v) { 
     return vec3(fabs(v.x), fabs(v.y), fabs(v.z)); 
 }
@@ -42,14 +49,25 @@ vec3 step(vec3 const& edge, vec3 v) {
     return vec3(step(edge.x, v.x), step(edge.y, v.y), step(edge.z, v.z)); 
 }
 
-vec3 reflect(vec3 rd, vec3 n) { 
-    return rd - n * (2 * dot(n, rd)); 
+float dot(vec3 const& a, vec3 const& b) { 
+    return a.x * b.x + a.y * b.y + a.z * b.z; 
 }
-
 
 vec3 norm(vec3 v) { 
     return v / length(v); 
 }
+
+////////
+
+// Visual functions
+
+vec3 reflect(vec3 rd, vec3 n) { 
+    return rd - n * (2 * dot(n, rd)); 
+}
+
+////////
+
+// Objects
 
 vec2 sphere(vec3 ro, vec3 rd, float r) {
     float b = dot(ro, rd);
@@ -89,8 +107,9 @@ float plane(vec3 ro, vec3 rd, vec3 p, float w) {
     return -(dot(ro, p) + w) / dot(rd, p);
 }
 
+////////
 
-
+// Rotate
 
 vec3 rotateX(vec3 a, double angle)
 {
@@ -115,3 +134,5 @@ vec3 rotateZ(vec3 a, double angle)
     b.y = a.x * sin(angle) + a.y * cos(angle);
     return b;
 }
+
+////////
