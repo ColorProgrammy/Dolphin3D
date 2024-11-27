@@ -9,6 +9,7 @@ Functions for engine operation
 // Please do not change this code!
 
 #pragma once
+
 #include "Vector2.h" // ----\
                              |=== Vectors
 #include "Vector3.h" // ----/
