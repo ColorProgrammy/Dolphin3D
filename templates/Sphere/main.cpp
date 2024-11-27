@@ -16,6 +16,7 @@ float minIt = 99999;
 float dist = 1e9;
 
 vec3 n = 0;
+vec3 n1 = 0;
 
 float albedo = 1;
 float brightness = 1;
