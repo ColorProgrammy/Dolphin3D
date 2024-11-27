@@ -4,7 +4,7 @@
 
 `v1.0.0a build 1`
 
-![A sphere](https://github.com/user-attachments/assets/2af8531f-bed2-4e99-a442-197d4fc47cfa)
+https://github.com/user-attachments/assets/74517561-27bb-4014-9b4f-23cb769e4082
 
 DolphinEngine is an open source framework for console 3D rendering. It's easy to use. There are templates to help you create renderings. The scripting itself is done in C-based languages, but we've kept it as simple as possible so you can easily write code.
 
