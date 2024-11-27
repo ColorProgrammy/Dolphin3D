@@ -25,9 +25,23 @@ class Program
             { "RotateX", "RotateX command begins." },
             { "RotateY", "RotateY command begins." },
             { "RotateZ", "RotateZ command begins." },
-            { "Scale", "Scale command begins." },
-            { "Translate", "Translate command begins." },
-            { "Transform", "Transform command begins." }
+            { "Vector2.h", "Vector2.h library loaded" },
+            { "Vector3.h", "Vector3.h library loaded" },
+            { "int Width", "The Width variable is set" },
+            { "Vector3.h", "Vector3.h library loaded" },
+            { "Vector3.h", "Vector3.h library loaded" },
+            { "Vector3.h", "Vector3.h library loaded" },
+            { "Vector3.h", "Vector3.h library loaded" },
+            { "Vector3.h", "Vector3.h library loaded" },
+            { "Vector3.h", "Vector3.h library loaded" },
+            { "Vector3.h", "Vector3.h library loaded" },
+            { "Vector3.h", "Vector3.h library loaded" },
+            { "Vector3.h", "Vector3.h library loaded" },
+            { "Vector3.h", "Vector3.h library loaded" },
+            { "Vector3.h", "Vector3.h library loaded" },
+            { "Vector3.h", "Vector3.h library loaded" },
+            { "Vector3.h", "Vector3.h library loaded" },
+            { "Vector3.h", "Vector3.h library loaded" }
         };
 
         string content = File.ReadAllText(filePath);
