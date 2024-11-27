@@ -3,23 +3,30 @@ DolphinEngine
 ### Setup the DolphinEngine
 
 First you need to download Visual Studio to compile the project.
-I recommend downloading Visual C++ Studio 2008, as all the code was written in it.
 
-Next you will need to add the solution to your Visual Studio.
+I recommend downloading `Visual Studio C++ 2008`, as all the code was written in it.
 
-Then you will need to write the script itself in main.cpp.
+Add files to the project.
 
-Next you need to right-click on the project in Solution Explorer and click Build.
-After this, the Debug folder will appear, where the compiled application is located.
+> Select only main.cpp and include for correct work, just in case
 
-----
+Then you will need to write the script itself in `main.cpp`.
 
-The include folder is responsible for libraries for the correct operation of the application or game.
-The _docs folder contains text files for help and assistance in the graphics engine.
-The templates folder contains test projects. They are mainly needed for help, references, and for testing itself.
-The Debug file contains the compiled project itself. (when it appears, at first it won't be there)
+Next you need to right-click on the project in Solution Explorer and click `Build`.
+
+After this, the `debug` folder will appear, where the compiled application is located.
 
 ----
 
-That's all!
-Good luck with your development!
+The `include` folder is responsible for libraries for the correct operation of the application or game.
+
+The `_docs` folder contains text files for help and assistance in the graphics engine.
+
+The `templates` folder contains test projects. They are mainly needed for help, references, and for testing itself.
+
+The `debug` file contains the compiled project itself. (when it appears, at first it won't be there)
+
+----
+
+### That's all!
+### Good luck with your development!
