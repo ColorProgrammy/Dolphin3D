@@ -10,7 +10,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
 
-public class VersionChecker {
+
+public class test {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
         Map<String, String> versionStatus = new HashMap<>();
@@ -18,12 +19,17 @@ public class VersionChecker {
         // List of versions
         versionStatus.put("1.0.0a", "Latest");
         
-        System.out.print("DolphinEngine.\nCompatibility.\n\n")
+        System.out.print("DolphinEngine.\nCompatibility.\n\n");
         System.out.print("Enter the project version: ");
         String currentVersion = scanner.nextLine();
         
         if (!versionStatus.containsKey(currentVersion)) {
             System.out.println("\033[31mThis version does not exist, please check the project version for correctness.\033[0m");
+            try {
+                Thread.sleep(3000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
             return;
         }
         
@@ -31,10 +37,25 @@ public class VersionChecker {
         
         if ("Latest".equals(status)) {
             System.out.println("\033[32mThe project version matches yours, you can use it.\033[0m");
+            try {
+                Thread.sleep(3000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         } else if ("Outdated".equals(status)) {
             System.out.println("\033[31mThis version of the project is outdated (" + currentVersion + "). You will not be able to use it correctly.\033[0m");
+            try {
+                Thread.sleep(3000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         } else {
             System.out.println("\033[33mThe project version is lower than yours, but you can use it.\033[0m");
+            try {
+                Thread.sleep(3000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
         
         scanner.close();
