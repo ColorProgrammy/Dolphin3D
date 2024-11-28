@@ -11,7 +11,7 @@ import java.util.Map;
 import java.util.Scanner;
 
 
-public class test {
+public class compatibility {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
         Map<String, String> versionStatus = new HashMap<>();
@@ -60,4 +60,6 @@ public class test {
         
         scanner.close();
     }
+}
+
 }
