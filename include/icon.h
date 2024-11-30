@@ -1,3 +1,11 @@
+/*
+File: icon.h
+Developer: ColorProgrammy
+
+Description:
+Library for loading application icons
+*/
+
 #include <Windows.h>
 
 HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
