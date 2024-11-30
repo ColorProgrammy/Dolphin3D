@@ -8,7 +8,7 @@ I recommend downloading `Visual Studio C++ 2008`, as all the code was written in
 
 Add files to the project.
 
-> Select only main.cpp and include for correct work, just in case
+> Select only main.cpp, assets and include folders for correct work, just in case
 
 Then you will need to write the script itself in `main.cpp`.
 
