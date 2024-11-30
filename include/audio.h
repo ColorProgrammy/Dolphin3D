@@ -1,3 +1,11 @@
+/*
+File: audio.h
+Developer: ColorProgrammy
+
+Description:
+Library for playing audio
+*/
+
 #include <windows.h>
 #pragma comment(lib, "winmm.lib")
 
