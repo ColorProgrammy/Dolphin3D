@@ -1,11 +1,8 @@
-# Screen settings, gradient and positions
+# Gradient and positions
 
 ### Here's what we'll look at:
 ```c++
 int main() {
-  // Screen setup
-  SetConsoleTitleA("DolphinEngine");
-  system("mode con cols=120 lines=30");
 
   // Gradient
   char gradient[] = " .,:!/rH$#@";
@@ -27,39 +24,6 @@ int main() {
 Again I dumped a bunch of code...
 
 Let's take it in order.
-
----
-Screen setup
----
-
-Let's take a closer look here.
-
-```c++
-SetConsoleTitleA("title");
-```
-
-This line is responsible for the window title.
-Where title is your name.
-
-> Let me remind you that we write the name in quotes (if it is not a variable call)
-
-```c++
-system("mode con cols=120 lines=30);
-```
-
-It looks more complicated,
-but that's only at first glance.
-
-Remember lesson 1 about variables?
-So, there at the very beginning we indicated 
-the length and width of the screen. 
-
-Yes, this line of code 
-is responsible for customizing the screen.
-
-In cols we write width, and in lines we write height.
-> And remember that it is not recommended to set values higher than 132 and 31.
-
 
 ---
 Gradient
@@ -110,4 +74,4 @@ We kind of place the object on the stage.
 
 > To raise an object up, you need to change the z coordinate to a NEGATIVE number.
 
-### Here we learn a little more about screen customization, gradient and position.
+### Here we learn a little more about gradient and position.
