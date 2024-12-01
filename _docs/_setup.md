@@ -1,6 +1,6 @@
 DolphinEngine
 --
-### Setup the DolphinEngine
+### Setup the Dolphin3D CL
 
 First you need to download Visual Studio to compile the project.
 
