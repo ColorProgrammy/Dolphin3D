@@ -46,9 +46,6 @@ is responsible for customizing the screen.
 
 In cols we write width, and in lines we write height.
 
-> And remember that it is not recommended to set values higher than 132 and 31. (in the next updates everything may be fixed)
-
-
 ---
 Set icon
 ---
