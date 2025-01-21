@@ -4,7 +4,7 @@
 #include <vector>
 #include <windows.h>
 #include <conio.h>
-#include "include/dolphin.h"
+#include "src/../include/dolphin.h"
 
 DWORD WINAPI changeBoxColor(LPVOID lpParam) {
     Box* box = static_cast<Box*>(lpParam);
