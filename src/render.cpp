@@ -1,4 +1,4 @@
-#include "include/render.h"
+#include "src/../include/dolphin.h"
 #include <iostream>
 #include <cstring>
 #include <cmath>
@@ -6,13 +6,6 @@
 #include <windows.h>
 #include <conio.h>
 #include <float.h>
-#include "include/Vector2.h"
-#include "include/Vector3.h"
-#include "include/functions.h"
-#include "include/audio.h"
-#include "include/setup.h"
-#include "include/objects.h"
-#include "include/color.h"
 
 
 CHAR_INFO* currentBuffer = NULL;
@@ -64,7 +57,6 @@ void render(int width, int height){
 
 
 bool initRender(int width, int height) {
-    // Initialize console window and buffer
     HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
     if (hConsole == INVALID_HANDLE_VALUE) {
         std::cerr << "Error getting console handle!" << std::endl;
@@ -73,17 +65,13 @@ bool initRender(int width, int height) {
     }
 
 	std::vector<Object*> objects;
-
-
-    // Allocate buffers
-    //setBuffer(width, height);
     if (!currentBuffer || !displayBuffer) {
 
-        freeBuffers(); //Clean up partial allocation
+        freeBuffers();
 		_getch();
         return false;
     }
-    return true; //Successfully init
+    return true;
 }
 
 void freeBuffers() {
@@ -134,7 +122,6 @@ void renderObjects(std::vector<Object*>& objects, vec3& ro, vec3& rd, bool& hit,
     hit = false;
     currentcolor = Color::Black();
 
-    // Поиск ближайшего объекта
     for (size_t k = 0; k < objects.size(); ++k) {
         Object* obj = objects[k];
         if (obj->set(ro, rd, currentDist, normal)) {
@@ -148,16 +135,13 @@ void renderObjects(std::vector<Object*>& objects, vec3& ro, vec3& rd, bool& hit,
     }
 
     if (currentDist < 99999.0f && hit) {
-        // Начальная позиция для расчета теней
         vec3 shadowRayOrigin = ro + rd * (currentDist - 0.01f);
         vec3 lightDirection = norm(light - shadowRayOrigin);
         float lightDistance = length(light - shadowRayOrigin);
         bool inShadow = false;
 
-        // Установка максимального расстояния для теней
-        const float maxShadowDistance = 100.0f;  // Установите нужное расстояние
+        const float maxShadowDistance = 100.0f;
 
-        // Проверяем на наличие объектов между источником света и объектом
         for (size_t k = 0; k < objects.size(); ++k) {
             Object* obj = objects[k];
             vec3 shadowNormal;
@@ -170,14 +154,13 @@ void renderObjects(std::vector<Object*>& objects, vec3& ro, vec3& rd, bool& hit,
             }
         }
 
-        // Рассчитываем яркость
         if (inShadow) {
-            brightness *= 0.7f * (dot(normal, lightDirection) * 0.5f + 0.5f) * currentAlbedo; // Уменьшаем яркость в тени
+            brightness *= 0.7f * (dot(normal, lightDirection) * 0.5f + 0.5f) * currentAlbedo;
         } else {
-            brightness *= (dot(normal, lightDirection) * 0.5f + 0.5f) * currentAlbedo; // Полная яркость
+            brightness *= (dot(normal, lightDirection) * 0.5f + 0.5f) * currentAlbedo;
         }
 
-		ro = ro + rd * (currentDist - 0.01f); // Сдвиг при пересечении
+		ro = ro + rd * (currentDist - 0.01f);
         brightness = max(brightness, 0.0f); 
     }
 }
