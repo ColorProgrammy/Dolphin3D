@@ -29,7 +29,7 @@ void render(int width, int height){
     HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
     if (hConsole == INVALID_HANDLE_VALUE) return;
 
-    DWORD dwBytesWritten;
+    //DWORD dwBytesWritten;
     COORD coord = { 0, 0 };
     COORD bufferSize = { (SHORT)width, (SHORT)height };
     SMALL_RECT rect = { 0, 0, (SHORT)width - 1, (SHORT)height - 1 };
@@ -89,9 +89,9 @@ void freeObjects(std::vector<Object*>& objects) {
 }
 void renderColor(int i, int j, int width, size_t gradientSize, const char* gradient, bool hit, Color currentcolor, float brightness)
 {
-    int colorIndex = (int)(brightness * 10.0f);
-    colorIndex = clamp(colorIndex, 0, gradientSize);
-    char pixel = gradient[colorIndex];
+	size_t colorIndex = static_cast<size_t>(brightness * 10.0f);
+	colorIndex = min(max(colorIndex, static_cast<size_t>(0)), gradientSize);
+	char pixel = gradient[colorIndex];
 
     currentBuffer[i + j * width].Char.AsciiChar = pixel;
     if (hit) {
@@ -163,4 +163,10 @@ void renderObjects(std::vector<Object*>& objects, vec3& ro, vec3& rd, bool& hit,
 		ro = ro + rd * (currentDist - 0.01f);
         brightness = max(brightness, 0.0f); 
     }
+}
+
+vec2 createUV(int i, int j, int width, int height, float aspect, float pixelAspect) {
+    vec2 uv = (vec2(static_cast<float>(i), static_cast<float>(j)) / vec2(static_cast<float>(width), static_cast<float>(height))) * 2 - 1;
+    uv.x *= aspect * pixelAspect;
+    return uv;
 }
