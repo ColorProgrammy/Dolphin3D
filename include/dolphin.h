@@ -5,7 +5,7 @@
 #include "src/../include/functions.h"
 #include "src/../include/audio.h"
 #include "src/../include/setup.h"
-#include "src/../include/objects.h"
+#include "src/../include/objects.hpp"
 #include "src/../include/color.h"
 #include "src/../include/render.h"
 #include "src/../include/rotate.h"
