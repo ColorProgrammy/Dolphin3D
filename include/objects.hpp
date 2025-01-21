@@ -107,7 +107,7 @@ inline vec4 cylIntersect(const vec3& ro, const vec3& rd, const vec3& a, const ve
     }
     t = ((y < 0.0f) ? 0.0f : baba - baoc) / bard;
     if (std::abs(k1 + k2 * t) < h) {
-        vec3 normal = ba * sign(y) / std::sqrt(baba);
+        vec3 normal = static_cast<vec3>(ba) * static_cast<float>(sign(y)) / static_cast<float>(std::sqrt(baba));
         return vec4(t, normal.x, normal.y, normal.z);
     }
     return vec4(-1.0f, 0.0f, 0.0f, 0.0f);
