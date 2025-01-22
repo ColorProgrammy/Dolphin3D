@@ -1,4 +1,3 @@
-#include "src/../include/dolphin.h"
 #include <iostream>
 #include <cstring>
 #include <cmath>
@@ -6,7 +5,7 @@
 #include <windows.h>
 #include <conio.h>
 #include <float.h>
-
+#include "../include/Dolphin3D.h"
 
 CHAR_INFO* currentBuffer = NULL;
 CHAR_INFO* displayBuffer = NULL;
@@ -57,6 +56,7 @@ void render(int width, int height){
 
 
 bool initRender(int width, int height) {
+    // Initialize console window and buffer
     HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
     if (hConsole == INVALID_HANDLE_VALUE) {
         std::cerr << "Error getting console handle!" << std::endl;
@@ -65,13 +65,17 @@ bool initRender(int width, int height) {
     }
 
 	std::vector<Object*> objects;
+
+
+    // Allocate buffers
+    //setBuffer(width, height);
     if (!currentBuffer || !displayBuffer) {
 
-        freeBuffers();
+        freeBuffers(); //Clean up partial allocation
 		_getch();
         return false;
     }
-    return true;
+    return true; //Successfully init
 }
 
 void freeBuffers() {
@@ -114,7 +118,8 @@ void renderColor(int i, int j, int width, size_t gradientSize, const char* gradi
     }
 }
 
-void renderObjects(std::vector<Object*>& objects, vec3& ro, vec3& rd, bool& hit, Color& currentcolor, float& brightness, vec3& normal, vec3& light, float lightRadius) {
+void renderObjects(std::vector<Object*>& objects, vec3& ro, vec3& rd, bool& hit, Color& currentcolor, float& brightness, vec3& normal, vec3& light) {
+	float lightRadius = 1.0f;
     float minDist = FLT_MAX;
     float currentAlbedo = 1.0f;
     float currentDist = FLT_MAX;
@@ -122,6 +127,7 @@ void renderObjects(std::vector<Object*>& objects, vec3& ro, vec3& rd, bool& hit,
     hit = false;
     currentcolor = Color::Black();
 
+    // Поиск ближайшего объекта
     for (size_t k = 0; k < objects.size(); ++k) {
         Object* obj = objects[k];
         if (obj->set(ro, rd, currentDist, normal)) {
@@ -135,13 +141,16 @@ void renderObjects(std::vector<Object*>& objects, vec3& ro, vec3& rd, bool& hit,
     }
 
     if (currentDist < 99999.0f && hit) {
+        // Начальная позиция для расчета теней
         vec3 shadowRayOrigin = ro + rd * (currentDist - 0.01f);
         vec3 lightDirection = norm(light - shadowRayOrigin);
         float lightDistance = length(light - shadowRayOrigin);
         bool inShadow = false;
 
-        const float maxShadowDistance = 100.0f;
+        // Установка максимального расстояния для теней
+        const float maxShadowDistance = 100.0f;  // Установите нужное расстояние
 
+        // Проверяем на наличие объектов между источником света и объектом
         for (size_t k = 0; k < objects.size(); ++k) {
             Object* obj = objects[k];
             vec3 shadowNormal;
@@ -154,18 +163,22 @@ void renderObjects(std::vector<Object*>& objects, vec3& ro, vec3& rd, bool& hit,
             }
         }
 
+        // Рассчитываем яркость
         if (inShadow) {
-            brightness *= 0.7f * (dot(normal, lightDirection) * 0.5f + 0.5f) * currentAlbedo;
+            brightness *= 0.7f * (dot(normal, lightDirection) * 0.5f + 0.5f) * currentAlbedo; // Уменьшаем яркость в тени
         } else {
-            brightness *= (dot(normal, lightDirection) * 0.5f + 0.5f) * currentAlbedo;
+            brightness *= (dot(normal, lightDirection) * 0.5f + 0.5f) * currentAlbedo; // Полная яркость
         }
 
-		ro = ro + rd * (currentDist - 0.01f);
+		ro = ro + rd * (currentDist - 0.01f); // Сдвиг при пересечении
         brightness = max(brightness, 0.0f); 
     }
 }
 
-vec2 createUV(int i, int j, int width, int height, float aspect, float pixelAspect) {
+vec2 createUV(int i, int j, int width, int height) {
+	float aspect = (float)width / height;
+    float pixelAspect = 8.0f / 16.0f;
+
     vec2 uv = (vec2(static_cast<float>(i), static_cast<float>(j)) / vec2(static_cast<float>(width), static_cast<float>(height))) * 2 - 1;
     uv.x *= aspect * pixelAspect;
     return uv;
