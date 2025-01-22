@@ -1,6 +1,6 @@
 #pragma once
 
-#include <cmath>
+#include <math.h>
 #include "include/functions.h"
 
 inline vec3 rotateAroundCenterX(vec3 a, double angle)
