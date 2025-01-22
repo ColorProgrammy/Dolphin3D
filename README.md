@@ -10,13 +10,13 @@ Dolphin3D CL is an open source framework for console 3D rendering. It's easy to 
 
 Our engine is unique, easy to write code and has a wide range of functions.
 
+This graphics engine is suitable for `beginners` :D.
+
 Also see `_docs` for guidance and help.
 
 And read the `license`.
 
-This graphics engine is suitable for `beginners` **:D**
-
-Develop games for **fun**!
+--------
 
 Good luck with the `development`.
 
