@@ -4,7 +4,8 @@
 #include <vector>
 #include <windows.h>
 #include <conio.h>
-#include "src/../include/dolphin.h"
+#include "../include/Dolphin3D.h"
+
 
 DWORD WINAPI changeBoxColor(LPVOID lpParam) {
     Box* box = static_cast<Box*>(lpParam);
@@ -31,9 +32,6 @@ int main() {
     int width = 150;
     int height = 30;
 
-    float aspect = (float)width / height;
-    float pixelAspect = 8.0f / 16.0f;
-
     setBuffer(width, height);
 
     if (!initRender(width, height)) {
@@ -47,7 +45,7 @@ int main() {
         return 1;
     }
 
-    char gradient[] = " .,:!/rH$#@";
+    char gradient[] = GRADIENT_2;
     size_t gradientSize = strlen(gradient) - 1;
 
     vec3 boxPos = vec3(0, 0, -2);
@@ -60,7 +58,6 @@ int main() {
     objects.push_back(new Plane(planePos, vec3(0, 1, 0), 0.5f, Color::White()));
     objects.push_back(new Sphere(spherePos, 1.5f, 2.0f, Color::Yellow()));
     
-
 	Box* testBox = new Box(boxPos, vec3(2,2,2), 1.0f, Color::Blue());
     objects.push_back(testBox);
 
@@ -71,6 +68,7 @@ int main() {
 
 	HANDLE colorChangeThread = CreateThread(NULL, 0, changeBoxColor, testBox, 0, NULL);
 
+
     for (int t = 1; t > 0; ++t) {
         std::swap(currentBuffer, displayBuffer);
 
@@ -79,20 +77,17 @@ int main() {
 
                 float brightness = 1.0f;
 
-                vec2 uv = (vec2(i, j) / vec2(width, height)) * 2 - 1;
-                uv.x *= aspect * pixelAspect;
+                vec2 uv = createUV(i, j, width, height);
 
                 vec3 rd = norm(vec3(1, uv));
-                vec3 ro = vec3(-7, 0, -1);
-
-				
+                vec3 ro = vec3(-7, 0, -1);		
 
                 rd = rotateAroundCenterY(rd, 0.5f);
                 ro = rotateAroundCenterY(ro, 0.5f);
                 ro = rotateAroundCenterZ(ro, t * 0.01f);
                 rd = rotateAroundCenterZ(rd, t * 0.01f);
 
-                renderObjects(objects, ro, rd, hit, currentcolor, brightness, normal, light, 1.0f);
+                renderObjects(objects, ro, rd, hit, currentcolor, brightness, normal, light);
                 renderColor(i, j, width, gradientSize, gradient, hit, currentcolor, brightness);
             }
         }
