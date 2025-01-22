@@ -26,7 +26,7 @@ int main() {
     size_t gradientSize = strlen(gradient) - 1;
 
     vec3 planePos = vec3(0, 0, -3);
-    vec3 light = vec3(0, 20, -7.0);
+    vec3 light = vec3(0, 100000000, -7.0);
 
     std::vector<Object*> objects;
     objects.push_back(new Plane(planePos, vec3(0, 1, 0), 0.5f, Color::White()));
