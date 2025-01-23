@@ -14,9 +14,6 @@ But first, it is recommended to read this.
 This project involves a lot of math,
 but you don't need to understand it all. :)
 
-There are also libraries,
-but you shouldn't go into them.
-
 #### By the end you will be able to make a small application yourself.
 
 ## Good luck!
