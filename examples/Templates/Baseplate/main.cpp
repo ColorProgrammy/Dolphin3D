@@ -4,52 +4,51 @@
 #include <vector>
 #include <windows.h>
 #include <conio.h>
-#include "src/../include/dolphin.h"
+#include "../include/Dolphin3D.h"
 
 int main() {
     bool hit;
     Color currentcolor;
     vec3 normal;
 
-    int width = 150;
-    int height = 30;
+	Config cfg = readConfig("config.ini");
 
-    float aspect = (float)width / height;
-    float pixelAspect = 8.0f / 16.0f;
+    int width = cfg.width;
+    int height = cfg.height;
 
     setBuffer(width, height);
-
     initRender(width, height);
-    setWindow(width, height, "Title");
+    setWindow(width, height, cfg.title);
 
-    char gradient[] = " .,:!/rH$#@";
-    size_t gradientSize = strlen(gradient) - 1;
+    char gradient[] = GRADIENT_0;
+    size_t gradientSize = 0;
+	setGradientSize(gradient, gradientSize);
 
-    vec3 planePos = vec3(0, 0, -3);
-    vec3 light = vec3(0, 100000000, -7.0);
+    vec3 light = vec3(1e9f, 0, 0);
+	vec3 planePos = vec3(0, 0, -3);
 
     std::vector<Object*> objects;
-    objects.push_back(new Plane(planePos, vec3(0, 1, 0), 0.5f, Color::White()));
-    
+	objects.push_back(new Plane(planePos, vec3(0, 1, 0), 0.5f, Color::White()));
+
     for (int t = 1; t > 0; ++t) {
-        std::swap(currentBuffer, displayBuffer);
+        swapBuffers(currentBuffer, displayBuffer, width, height);
 
         for (int j = 0; j < height; ++j) {
             for (int i = 0; i < width; ++i) {
-
                 float brightness = 1.0f;
 
-                vec2 uv = createUV(i, j, width, height, aspect, pixelAspect);
+                vec2 uv = createUV(i, j, width, height);
 
                 vec3 rd = norm(vec3(1, uv));
-                vec3 ro = vec3(-7, 0, -1);
+                vec3 ro = vec3(-7, 0, -1);		
 
-                renderObjects(objects, ro, rd, hit, currentcolor, brightness, normal, light, 1.0f);
+                renderObjects(objects, ro, rd, hit, currentcolor, brightness, normal, light);
                 renderColor(i, j, width, gradientSize, gradient, hit, currentcolor, brightness);
             }
         }
         render(width, height);
     }
+
     freeBuffers();
     freeObjects(objects);
 
