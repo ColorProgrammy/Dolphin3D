@@ -25,28 +25,25 @@ DWORD WINAPI changeBoxColor(LPVOID lpParam) {
 }
 
 int main() {
+	Config cfg = readConfig("config.ini");
     bool hit;
     Color currentcolor;
     vec3 normal;
 
-    int width = 150;
-    int height = 30;
+    int width = cfg.width;
+    int height = cfg.height;
+
 
     setBuffer(width, height);
+    initRender(width, height);
+    setWindow(width, height, cfg.title);
 
-    if (!initRender(width, height)) {
-        std::cerr << "Render initialization failed!" << std::endl;
-        _getch();
-        return 1;
-    }
-    if (!setWindow(width, height, "Example")) {
-        std::cout << "Failed to set console window." << std::endl;
-        _getch();
-        return 1;
-    }
+	setIcon(cfg.iconPath.c_str());
 
-    char gradient[] = GRADIENT_2;
-    size_t gradientSize = strlen(gradient) - 1;
+    char gradient[] = GRADIENT_0;
+    size_t gradientSize = 0;
+
+	setGradientSize(gradient, gradientSize);
 
     vec3 boxPos = vec3(0, 0, -2);
     vec3 planePos = vec3(0, 0, -3);
@@ -70,7 +67,7 @@ int main() {
 
 
     for (int t = 1; t > 0; ++t) {
-        std::swap(currentBuffer, displayBuffer);
+        swapBuffers(currentBuffer, displayBuffer, width, height);
 
         for (int j = 0; j < height; ++j) {
             for (int i = 0; i < width; ++i) {
