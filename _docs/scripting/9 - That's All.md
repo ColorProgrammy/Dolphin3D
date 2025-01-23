@@ -12,4 +12,4 @@ If you find any bugs or shortcomings, please let us know! (via Issues in Github)
 
 ## And yes, thank you for using our product.
 
-#### Copyright © ColorProgrammy 2024
+#### Copyright © ColorProgrammy 2024 - 2025
