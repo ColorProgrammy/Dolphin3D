@@ -56,7 +56,6 @@ void render(int width, int height){
 
 
 bool initRender(int width, int height) {
-    // Initialize console window and buffer
     HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
     if (hConsole == INVALID_HANDLE_VALUE) {
         std::cerr << "Error getting console handle!" << std::endl;
@@ -64,18 +63,23 @@ bool initRender(int width, int height) {
         return false;
     }
 
-	std::vector<Object*> objects;
+	HWND consoleWindow = GetConsoleWindow();
 
+    MoveWindow(consoleWindow, 0, 0, width * 8, height * 16, TRUE);
 
-    // Allocate buffers
-    //setBuffer(width, height);
+    LONG style = GetWindowLong(consoleWindow, GWL_STYLE);
+    style &= ~(WS_SIZEBOX | WS_MAXIMIZEBOX);
+    SetWindowLong(consoleWindow, GWL_STYLE, style);
+
+    SetWindowPos(consoleWindow, NULL, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_NOZORDER | SWP_NOACTIVATE | SWP_NOOWNERZORDER | SWP_FRAMECHANGED);
+
     if (!currentBuffer || !displayBuffer) {
 
-        freeBuffers(); //Clean up partial allocation
+        freeBuffers();
 		_getch();
         return false;
     }
-    return true; //Successfully init
+    return true;
 }
 
 void freeBuffers() {
@@ -182,4 +186,11 @@ vec2 createUV(int i, int j, int width, int height) {
     vec2 uv = (vec2(static_cast<float>(i), static_cast<float>(j)) / vec2(static_cast<float>(width), static_cast<float>(height))) * 2 - 1;
     uv.x *= aspect * pixelAspect;
     return uv;
+}
+
+void swapBuffers(CHAR_INFO* currentBuffer, CHAR_INFO* displayBuffer, int width, int height) {
+    int bufferSize = width * height;
+    for (int i = 0; i < bufferSize; ++i) {
+        std::swap(currentBuffer[i], displayBuffer[i]);
+    }
 }
