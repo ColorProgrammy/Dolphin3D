@@ -155,3 +155,18 @@ setGradientSize(gradient, gradientSize);
 
 There are several types of gradients. See `gradients.h` to see them and possibly add your own.
 
+Use `setGradientSize` for the gradient to work properly.
+
+-----
+
+Next we'll add light.
+
+```cpp
+vec3 light = vec3(0, 0, 0);
+```
+
+These are just coordinates of the light. Then, if necessary, you need to move it to a long distance (like 1e9f, as it works like a spotlight.
+
+> Next to this position, you can specify other ones, such as the position of the object, etc.
+
+-----
