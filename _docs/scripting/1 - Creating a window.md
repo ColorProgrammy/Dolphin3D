@@ -126,3 +126,32 @@ As you can see, we do not specify numbers, but take them from `config.ini`
 
 -----
 
+Next we will indicate...
+
+```cpp
+setBuffer(width, height);
+initRender(width, height);
+setWindow(width, height, cfg.title);
+```
+
+We first create the buffers `setBuffer(width, height);`.
+
+Next we initialize rendering `initRender(width, height);`.
+
+Next we configure the window
+`setWindow(width, height, cfg.title);`.
+
+**Nothing complicated!**
+
+-----
+
+Now we need to create a gradient from the symbols.
+
+```cpp
+char gradient[] = GRADIENT_0;
+size_t gradientSize = 0;
+setGradientSize(gradient, gradientSize);
+```
+
+There are several types of gradients. See `gradients.h` to see them and possibly add your own.
+
