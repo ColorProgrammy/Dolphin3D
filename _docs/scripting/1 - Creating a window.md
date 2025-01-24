@@ -60,3 +60,69 @@ int main() {
     return 0;
 }
 ```
+
+Let's take a look at the code.
+
+-----
+
+First we import the Dolphin3D.h library and others.
+
+```cpp
+#include <iostream>
+#include <cstring>
+#include <cmath>
+#include <vector>
+#include <windows.h>
+#include <conio.h>
+#include "../include/Dolphin3D.h"
+```
+
+---
+
+Next we initialize `3` variables:
+
+```cpp
+bool hit;
+Color currentcolor;
+vec3 normal;
+```
+
+I won’t go into detail here, as we will discuss this in the following chapters.
+
+-----
+
+Next we import config.
+
+```cpp
+Config cfg = readConfig("config.ini");
+```
+
+**But what is it for?**
+
+***It includes:***
+
+```ini
+[Window]
+Title = Example
+IconPath = assets/ufo.ico
+Width = 100
+Height = 30
+```
+
+It is used to easily change application data.
+
+We specify a relative path and therefore we only have the file name.
+
+-----
+
+Now we will indicate the dimensions.
+
+```cpp
+int width = cfg.width;
+int height = cfg.height;
+```
+
+As you can see, we do not specify numbers, but take them from `config.ini`
+
+-----
+
