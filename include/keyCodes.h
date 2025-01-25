@@ -1,4 +1,5 @@
-#pragma once
+#ifndef KEYCODES_H
+#define KEYCODES_H
 
 #define KEY_UP     72
 #define KEY_DOWN   80
@@ -27,3 +28,5 @@
 #define KEY_F11   133
 #define KEY_F12   134
 #define KEY_INS    82
+
+#endif /* KEYCODES_H */
