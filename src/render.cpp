@@ -1,3 +1,4 @@
+#include "../include/Dolphin3D.h"
 #include <iostream>
 #include <cstring>
 #include <cmath>
@@ -5,12 +6,14 @@
 #include <windows.h>
 #include <conio.h>
 #include <float.h>
-#include "../include/Dolphin3D.h"
 
 CHAR_INFO* currentBuffer = NULL;
 CHAR_INFO* displayBuffer = NULL;
 
 void setBuffer(int width, int height) {
+	std::cout << "Setting buffers..." << std::endl;
+	Log::write("Setting buffers...");
+
     if (currentBuffer) {
       freeBuffers();
     }
@@ -18,12 +21,20 @@ void setBuffer(int width, int height) {
     displayBuffer = new CHAR_INFO[width * height];
     if (!currentBuffer || !displayBuffer) {
         std::cerr << "Memory allocation failed!" << std::endl;
+		Log::write("Error: Memory allocation failed!");
+		_getch();
         exit(1);
     }
 }
 
 void render(int width, int height){
   if (!currentBuffer || !displayBuffer) return;
+  	static bool firstCall = true;
+    if (firstCall) {
+        Log::write("Rendering...");
+        firstCall = false;
+    }
+
 
     HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
     if (hConsole == INVALID_HANDLE_VALUE) return;
@@ -34,18 +45,21 @@ void render(int width, int height){
     SMALL_RECT rect = { 0, 0, (SHORT)width - 1, (SHORT)height - 1 };
 
 	if (hConsole == INVALID_HANDLE_VALUE) {
+		Log::write("Error: Invalid handle value");
 		_getch();
         exit(1);
     }
 
     CONSOLE_CURSOR_INFO cursorInfo;
     if (!GetConsoleCursorInfo(hConsole, &cursorInfo)) {
+		Log::write("Error: Failed to get cursor information");
 		_getch();
         exit(1);
     }
 
     cursorInfo.bVisible = FALSE;
     if (!SetConsoleCursorInfo(hConsole, &cursorInfo)) {
+		Log::write("Error: Failed to set cursor information");
 		_getch();
         exit(1);
     }
@@ -56,9 +70,13 @@ void render(int width, int height){
 
 
 bool initRender(int width, int height) {
+	std::cout << "Initialization in progress..." << std::endl;
+	Log::write("Initialization in progress...");
+
     HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
     if (hConsole == INVALID_HANDLE_VALUE) {
         std::cerr << "Error getting console handle!" << std::endl;
+		Log::write("Error: Error getting console handle!");
 		_getch();
         return false;
     }
@@ -83,6 +101,7 @@ bool initRender(int width, int height) {
 }
 
 void freeBuffers() {
+	Log::write("Freeing up buffers...");
     delete[] currentBuffer;
     currentBuffer = NULL;
     delete[] displayBuffer;
@@ -90,6 +109,11 @@ void freeBuffers() {
 }
 
 void freeObjects(std::vector<Object*>& objects) {
+	static bool firstCall = true;
+    if (firstCall) {
+        Log::write("Freeing up objects...");
+        firstCall = false;
+    }
     for (size_t i = 0; i < objects.size(); ++i) {
         delete objects[i];
     }
@@ -97,6 +121,11 @@ void freeObjects(std::vector<Object*>& objects) {
 }
 void renderColor(int i, int j, int width, size_t gradientSize, const char* gradient, bool hit, Color currentcolor, float brightness)
 {
+	static bool firstCall = true;
+    if (firstCall) {
+        Log::write("\"renderColor\" in progress...");
+        firstCall = false;
+    }
 	size_t colorIndex = static_cast<size_t>(brightness * 10.0f);
 	colorIndex = min(max(colorIndex, static_cast<size_t>(0)), gradientSize);
 	char pixel = gradient[colorIndex];
@@ -123,6 +152,11 @@ void renderColor(int i, int j, int width, size_t gradientSize, const char* gradi
 }
 
 void renderObjects(std::vector<Object*>& objects, vec3& ro, vec3& rd, bool& hit, Color& currentcolor, float& brightness, vec3& normal, vec3& light) {
+	static bool firstCall = true;
+    if (firstCall) {
+        Log::write("\"renderObjects\" in progress...");
+        firstCall = false;
+    }
 	float lightRadius = 1.0f;
     float minDist = FLT_MAX;
     float currentAlbedo = 1.0f;
@@ -180,6 +214,11 @@ void renderObjects(std::vector<Object*>& objects, vec3& ro, vec3& rd, bool& hit,
 }
 
 vec2 createUV(int i, int j, int width, int height) {
+	static bool firstCall = true;
+    if (firstCall) {
+        Log::write("Creating UV...");
+        firstCall = false;
+    }
 	float aspect = (float)width / height;
     float pixelAspect = 8.0f / 16.0f;
 
