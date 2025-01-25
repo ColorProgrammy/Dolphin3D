@@ -25,7 +25,15 @@ DWORD WINAPI changeBoxColor(LPVOID lpParam) {
 }
 
 int main() {
-	Config cfg = readConfig("config.ini");
+	std::string configPath = "config.ini";
+	std::string folderName = "Example";
+
+    Config cfg;
+	if (!setConfig(folderName, configPath, cfg)) {
+		_getch();
+		return 1;
+	}
+
     bool hit;
     Color currentcolor;
     vec3 normal;
@@ -38,7 +46,7 @@ int main() {
     initRender(width, height);
     setWindow(width, height, cfg.title);
 
-	setIcon(cfg.iconPath.c_str());
+	setIcon(cfg, folderName);
 
     char gradient[] = GRADIENT_0;
     size_t gradientSize = 0;
