@@ -10,3 +10,5 @@
 #include "../include/render.h"
 #include "../include/rotate.h"
 #include "../include/gradients.h"
+#include "../include/log.h"
+#include "../include/keyCodes.h"
