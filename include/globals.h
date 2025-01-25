@@ -1,8 +1,8 @@
-#ifndef GLOBALS_H
-#define GLOBALS_H
-
+#pragma once
+#include "log.h"
 #include <windows.h>
+#include <string>
 
 extern HANDLE hConsole;
-
-#endif
+extern std::string configPath;
+extern std::string folderName;
