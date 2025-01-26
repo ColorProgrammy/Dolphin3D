@@ -5,5 +5,3 @@
 HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
 std::string configPath = "config.ini";
 std::string folderName = "Example";
-
-std::wstring Log::logPath;
