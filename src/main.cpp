@@ -25,14 +25,10 @@ DWORD WINAPI changeBoxColor(LPVOID lpParam) {
 }
 
 int main() {
-	std::string configPath = "config.ini";
-	std::string folderName = "Example";
-
     Config cfg;
-	if (!setConfig(folderName, configPath, cfg)) {
-		_getch();
-		return 1;
-	}
+    if (!setConfig(folderName, configPath, cfg)) {
+        return 1;
+    }
 
     bool hit;
     Color currentcolor;
