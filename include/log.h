@@ -7,29 +7,14 @@
 
 class Log {
 private:
+    static int successCount;
+    static int errorCount;
     static std::wstring logPath;
     
 public:
-    static void init(const std::string& folderName, const std::string& logFileName) {
-        wchar_t documentsPath[MAX_PATH];
-        SHGetFolderPathW(NULL, CSIDL_MYDOCUMENTS, NULL, 0, documentsPath);
-        
-        logPath = std::wstring(documentsPath) + L"\\" + 
-                 std::wstring(folderName.begin(), folderName.end()) + L"\\" +
-                 std::wstring(logFileName.begin(), logFileName.end());
-    }
-
-    static void write(const std::string& message) {
-        time_t now = time(NULL);
-        tm timeinfo;
-        localtime_s(&timeinfo, &now);
-        char buffer[80];
-        strftime(buffer, 80, "%Y-%m-%d %H:%M:%S", &timeinfo);
-
-        std::ofstream logFile(logPath.c_str(), std::ios::app);
-        if (logFile) {
-            logFile << "[" << buffer << "] " << message << std::endl;
-            logFile.close();
-        }
-    }
+    static void init(const std::string& folderName, const std::string& logFileName);
+    static void write(const std::string& message, int status = 0); // 0 - INFO, 1 - SUCCESS, 2 - ERROR
+    static void writeStats();
 };
+
+BOOL WINAPI ConsoleHandler(DWORD signal);
