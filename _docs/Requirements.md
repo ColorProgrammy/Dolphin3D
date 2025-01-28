@@ -1,5 +1,7 @@
 # System requirements
 
+I highly recommend reading it.
+
 ## Minimal
 ### OS
 **Windows Vista**
@@ -28,6 +30,8 @@ Free memory space **100 MB** and above
 # Software
 ## Recommended
 **Visual Studio C++ 2008** and above
+
+Or use the compiler from VS2008.
 
 Using other software that supports the C/C++ version described above.
 
