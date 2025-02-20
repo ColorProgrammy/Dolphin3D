@@ -6,6 +6,34 @@
 #include "color.h"
 #include <memory>
 
+inline bool rayTriangleIntersect(const vec3& ro, const vec3& rd, 
+                          const vec3& v0, const vec3& v1, const vec3& v2, 
+                          float& t, vec3& normal) {
+    vec3 edge1 = v1 - v0;
+    vec3 edge2 = v2 - v0;
+    vec3 h = cross(rd, edge2);
+    float a = dot(edge1, h);
+    if (a > -1e-6 && a < 1e-6) return false;
+
+    float f = 1.0 / a;
+    vec3 s = ro - v0;
+    float u = f * dot(s, h);
+    if (u < 0.0 || u > 1.0) return false;
+
+    vec3 q = cross(s, edge1);
+    float v = f * dot(rd, q);
+    if (v < 0.0 || u + v > 1.0) return false;
+
+    t = f * dot(edge2, q);
+    if (t > 1e-6) {
+        normal = norm(cross(edge1, edge2));
+        return true;
+    }
+
+    return false;
+}
+
+
 inline vec2 sphere(vec3 ro, vec3 rd, float r) {
 	float b = dot(ro, rd);
 	float c = dot(ro, ro) - r * r;
@@ -205,6 +233,46 @@ public:
         this->color = color;
     }
 };
+
+class MeshObject : public Object {
+private:
+    Mesh mesh;
+    vec3 position;
+
+public:
+    MeshObject(const std::string& filename, const vec3& pos, float albedo, const Color& color = Color::White())
+        : position(pos), Object(albedo, color) {
+        mesh.loadFromOBJ(filename);
+    }
+
+    bool set(vec3 ro, vec3 rd, float& dist, vec3& n) override {
+        bool hit = false;
+        for (const auto& face : mesh.faces) {
+            if (face.size() < 3) continue;  // Пропуск некорректных граней
+            vec3 v0 = mesh.vertices[face[0]] + position;
+            vec3 v1 = mesh.vertices[face[1]] + position;
+            vec3 v2 = mesh.vertices[face[2]] + position;
+
+            float t;
+            vec3 normal;
+            if (rayTriangleIntersect(ro, rd, v0, v1, v2, t, normal) && t < dist) {
+                dist = t;
+                n = normal;
+                hit = true;
+            }
+        }
+        return hit;
+    }
+
+    void setPosition(const vec3& pos) override {
+        position = pos;
+    }
+
+    void setColor(const Color& color) override {
+        this->color = color;
+    }
+};
+
 
 class Sphere : public Object {
 private:
