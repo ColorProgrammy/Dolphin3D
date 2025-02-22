@@ -11,30 +11,23 @@ CHAR_INFO* currentBuffer = NULL;
 CHAR_INFO* displayBuffer = NULL;
 
 void setBuffer(int width, int height) {
-    static bool firstCall = true;
-    if (firstCall) {
-        std::cout << "Setting buffers..." << std::endl;
-        Log::write("Setting buffers...", 0);
-        firstCall = false;
-    }
-
+    const size_t bufferSize = static_cast<size_t>(width) * height;
+    
     if (currentBuffer) {
         freeBuffers();
     }
 
-    const size_t bufferSize = static_cast<size_t>(width) * height;
-
-    // Логирование размеров буферов
-    std::ostringstream oss;
-    oss << "Buffer size: " << bufferSize;
-    Log::write(oss.str(), 0);
-
     try {
         currentBuffer = new CHAR_INFO[bufferSize];
         displayBuffer = new CHAR_INFO[bufferSize];
-
-        ZeroMemory(currentBuffer, bufferSize * sizeof(CHAR_INFO));
-        ZeroMemory(displayBuffer, bufferSize * sizeof(CHAR_INFO));
+        
+        // Initialize both buffers properly
+        for (size_t i = 0; i < bufferSize; i++) {
+            currentBuffer[i].Char.AsciiChar = ' ';
+            currentBuffer[i].Attributes = 15;
+            displayBuffer[i].Char.AsciiChar = ' ';
+            displayBuffer[i].Attributes = 15;
+        }
     }
     catch (const std::bad_alloc&) {
         Log::write("Memory allocation failed - buffer size too large", 2);
@@ -42,55 +35,26 @@ void setBuffer(int width, int height) {
         _getch();
         exit(1);
     }
-
-    static bool firstSuccess = true;
-    if (firstSuccess) {
-        Log::write("Buffers allocated successfully", 1);
-        firstSuccess = false;
-    }
 }
-void render(int width, int height) {
+
+void render(int width, int height, int fps) {
     if (!currentBuffer || !displayBuffer) return;
-    static bool firstCall = true;
-    if (firstCall) {
-        Log::write("Rendering...", 0);
-        firstCall = false;
-    }
 
     HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
-    if (hConsole == INVALID_HANDLE_VALUE) {
-        Log::write("Invalid handle value", 2);
-        return;
-    }
+    if (hConsole == INVALID_HANDLE_VALUE) return;
 
-    COORD coord = { 0, 0 };
     COORD bufferSize = { (SHORT)width, (SHORT)height };
-    SMALL_RECT rect = { 0, 0, (SHORT)width - 1, (SHORT)height - 1 };
-
-    CONSOLE_CURSOR_INFO cursorInfo;
-    if (!GetConsoleCursorInfo(hConsole, &cursorInfo)) {
-        Log::write("Failed to get cursor information", 2);
-        _getch();
-        exit(1);
-    }
-
-    cursorInfo.bVisible = FALSE;
-    if (!SetConsoleCursorInfo(hConsole, &cursorInfo)) {
-        Log::write("Failed to set cursor information", 2);
-        _getch();
-        exit(1);
-    }
+    COORD coord = { 0, 0 };
+    SMALL_RECT rect = { 0, 0, (SHORT)(width - 1), (SHORT)(height - 1) };
 
     WriteConsoleOutput(hConsole, displayBuffer, bufferSize, coord, &rect);
-    SetConsoleTextAttribute(hConsole, 15);
 
-    static bool firstSuccess = true;
-    if (firstSuccess) {
-        Log::write("Render system initialized successfully", 1);
-        firstSuccess = false;
+    if (fps > 0) {
+        // Calculate the sleep duration based on the desired frame rate
+        int sleepDuration = 1000 / fps;
+        Sleep(sleepDuration);
     }
 }
-
 bool initRender(int width, int height) {
     static bool firstCall = true;
     if (firstCall) {
@@ -211,6 +175,8 @@ void renderObjects(std::vector<Object*>& objects, vec3& ro, vec3& rd, bool& hit,
     hit = false;
     currentcolor = Color::Black();
 
+
+
     for (size_t k = 0; k < objects.size(); ++k) {
         Object* obj = objects[k];
         if (obj->set(ro, rd, currentDist, normal)) {
@@ -225,17 +191,18 @@ void renderObjects(std::vector<Object*>& objects, vec3& ro, vec3& rd, bool& hit,
 
     if (currentDist < 99999.0f && hit) {
         vec3 shadowRayOrigin = ro + rd * (currentDist - 0.01f);
-        vec3 lightDirection = norm(light - shadowRayOrigin);
+        vec3 lightDirection = norm(light - shadowRayOrigin + vec3(1e-3f));
         float lightDistance = length(light - shadowRayOrigin);
         bool inShadow = false;
-        const float maxShadowDistance = 100.0f;
+        const float maxShadowDistance = 3.0f;
+
 
         for (size_t k = 0; k < objects.size(); ++k) {
             Object* obj = objects[k];
             vec3 shadowNormal;
             float shadowDist = FLT_MAX;
             if (obj->set(shadowRayOrigin, lightDirection, shadowDist, shadowNormal)) {
-                if (shadowDist < lightDistance && shadowDist < lightRadius && shadowDist < maxShadowDistance) {
+                if (shadowDist < lightDistance && shadowDist < maxShadowDistance) {
                     inShadow = true;
                     break;
                 }
@@ -265,18 +232,15 @@ vec2 createUV(int i, int j, int width, int height) {
         Log::write("Creating UV...", 0);
         firstCall = false;
     }
+    // Корректировка для центрирования пикселей
+    float u = (i + 0.5f) / width * 2.0f - 1.0f;
+    float v = (j + 0.5f) / height * 2.0f - 1.0f; // Invert the v coordinate
 
-    float aspect = (float)width / height;
-    float pixelAspect = 8.0f / 16.0f;
-    vec2 uv = (vec2(static_cast<float>(i), static_cast<float>(j)) / vec2(static_cast<float>(width), static_cast<float>(height))) * 2 - 1;
-    uv.x *= aspect * pixelAspect;
+    // Учет соотношения сторон консольных символов
+    float consoleAspect = 8.0f / 16.0f;
+    u *= ((float)width / height) * consoleAspect;
 
-    static bool firstSuccess = true;
-    if (firstSuccess) {
-        Log::write("UV system initialized successfully", 1);
-        firstSuccess = false;
-    }
-    return uv;
+    return vec2(u, v);
 }
 
 void swapBuffers(CHAR_INFO* currentBuffer, CHAR_INFO* displayBuffer, int width, int height) {
@@ -288,7 +252,7 @@ void swapBuffers(CHAR_INFO* currentBuffer, CHAR_INFO* displayBuffer, int width, 
 
     int bufferSize = width * height;
     for (int i = 0; i < bufferSize; ++i) {
-        std::swap(currentBuffer[i], displayBuffer[i]);
+        memcpy(displayBuffer, currentBuffer, sizeof(CHAR_INFO) * width * height);
     }
 
     static bool firstSuccess = true;
