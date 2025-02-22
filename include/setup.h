@@ -1,5 +1,4 @@
 #pragma once
-#define _CRT_SECURE_NO_WARNINGS
 #include <iostream>
 #include <fstream>
 #include <sstream>
@@ -12,7 +11,8 @@
 #include <stdio.h>
 
 
-
+#pragma warning(push)
+#pragma warning(disable : 4996)
 
 struct Config {
     std::string title;
@@ -229,3 +229,5 @@ inline bool setConfig(const std::string& folderName, const std::string& configPa
     std::cerr << "Error: Config file not found in any location" << std::endl;
     return false;
 }
+
+#pragma warning(pop)
