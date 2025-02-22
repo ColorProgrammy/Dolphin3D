@@ -1,6 +1,5 @@
-#define _CRT_SECURE_NO_WARNINGS
-
 #pragma once
+#define _CRT_SECURE_NO_WARNINGS
 #include <iostream>
 #include <fstream>
 #include <sstream>
@@ -11,7 +10,7 @@
 #include <conio.h>
 #include "log.h"
 #include <stdio.h>
-#include <KnownFolders.h>
+
 
 
 
@@ -124,52 +123,56 @@ inline void copyConfigFile(const std::string& folderName, const std::string& con
     std::string newFolderPath = std::string(documentsPath) + "\\" + folderName;
 
     CreateDirectory(newFolderPath.c_str(), NULL);
+
+    std::string configSource = configFileName;
+    std::string configDest = newFolderPath + "\\" + configFileName;
     
-    // Force copy config file
-    std::string copyConfigCommand = "copy /Y \"" + configFileName + "\" \"" + 
-                                  newFolderPath + "\\" + configFileName + "\"";
-    system(copyConfigCommand.c_str());
+    std::ifstream srcConfig(configSource.c_str(), std::ios::binary);
+    std::ofstream dstConfig(configDest.c_str(), std::ios::binary);
+    dstConfig << srcConfig.rdbuf();
 
-    // Force copy assets folder
-    std::string copyAssetsCommand = "xcopy /E /I /Y ..\\assets \"" + newFolderPath + "\\assets\"";
-    system(copyAssetsCommand.c_str());
-}
-
-inline void initConsoleHandler() {
-    SetConsoleCtrlHandler(ConsoleHandler, TRUE);
+    std::string command = "xcopy /E /I /Y ..\\assets \"" + newFolderPath + "\\assets\"";
+    system(command.c_str());
 }
 
 inline void createLogFile(const std::string& folderName, const Config& cfg) {
-    wchar_t documentsPath[MAX_PATH];
-    SHGetFolderPathW(NULL, CSIDL_PERSONAL, NULL, 0, documentsPath);
+    char documentsPath[MAX_PATH];
+    SHGetFolderPathA(NULL, CSIDL_PERSONAL, NULL, 0, documentsPath);
     
     Log::init(folderName, "log.txt");
     
-    std::wstring logFullPath = std::wstring(documentsPath) + L"\\" + 
-                              std::wstring(folderName.begin(), folderName.end()) + L"\\" + 
-                              std::wstring(cfg.logPath.begin(), cfg.logPath.end());
+    std::string fullPath = std::string(documentsPath) + "\\" + folderName + "\\" + cfg.logPath;
+    std::ofstream logFile(fullPath.c_str(), std::ios::out | std::ios::trunc);
     
-    std::wofstream logFile(logFullPath.c_str(), std::ios::out | std::ios::trunc);
-    if (!logFile) {
-        std::wcerr << L"Error: Unable to create log file '" << logFullPath << L"'" << std::endl;
-        _getch();
-        exit(1);
+    std::string dirPath = std::string(documentsPath) + "\\" + folderName;
+    size_t pos = cfg.logPath.find_last_of("\\/");
+    if (pos != std::string::npos) {
+        dirPath += "\\" + cfg.logPath.substr(0, pos);
+        if (!CreateDirectoryA(dirPath.c_str(), NULL)) {
+            DWORD err = GetLastError();
+            if (err != ERROR_ALREADY_EXISTS) {
+                std::cerr << "Error creating log directory: " << dirPath << std::endl;
+                _getch();
+                exit(1);
+            }
+        }
+    } else {
+		std::ofstream file(fullPath.c_str(), std::ios::trunc);
+        Log::write("Title: " + cfg.title);
+        std::stringstream ss;
+        ss << "Window size: " << cfg.width << " x " << cfg.height;
+        Log::write(ss.str());
+        Log::write("---");
+        Log::write("Loading...");
+        Log::write("---");
+        Log::write("Application opened.");
+
+        SetConsoleCtrlHandler(ConsoleHandler, TRUE);
+        
+        std::cout << "Log file created successfully: " << fullPath << std::endl;
     }
-    
-    Log::write("Title: " + cfg.title);
-    std::stringstream ss;
-    ss << "Window size: " << cfg.width << " x " << cfg.height;
-    Log::write(ss.str());
-    Log::write("---");
-    Log::write("Loading...");
-    Log::write("---");
-    Log::write("Application opened.");
-	initConsoleHandler();
-    
-    std::wcout << L"Log file created successfully: " << logFullPath << std::endl;
     logFile.close();
 }
-
 
 inline void setIcon(const Config& cfg, const std::string& folderName) {
     char documentsPath[MAX_PATH];
@@ -192,12 +195,10 @@ inline void setIcon(const Config& cfg, const std::string& folderName) {
 inline bool setWindow(int width, int height, const std::string& title) {
     SetConsoleTitleA(title.c_str());
     char modeCommand[50];
-    sprintf_s(modeCommand, sizeof(modeCommand), "mode con cols=%d lines=%d", width, height);
+    _snprintf(modeCommand, sizeof(modeCommand), "mode con cols=%d lines=%d", width, height);
     int result = system(modeCommand);
     return result == 0;
 }
-
-
 inline bool setConfig(const std::string& folderName, const std::string& configPath, Config& cfg) {
     // First try - relative path from executable
     std::string relativePath = "..\\" + configPath;
