@@ -16,10 +16,11 @@ void setBuffer(int width, int height);
 void freeBuffers();
 void freeObjects(std::vector<Object*>& objects);
 bool initRender(int width, int height);
-void render(int width, int height);
+void render(int width, int height, int fps = 60);
 void renderColor(int i, int j, int width, size_t gradientSize, const char* gradient, bool hit, Color currentcolor, float brightness);
 void renderObjects(std::vector<Object*>& objects, vec3& ro, vec3& rd, bool& hit, Color& currentcolor, float& brightness, vec3& normal, vec3& light);
 vec2 createUV(int i, int j, int width, int height);
 void swapBuffers(CHAR_INFO* currentBuffer, CHAR_INFO* displayBuffer, int width, int height);
+
 
 #endif
