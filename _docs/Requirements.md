@@ -16,12 +16,12 @@ Free memory space **100 MB** and above
 ## Minimal
 **C**: C99
 
-**C++**: C++ 98
+**C++**: C++98
 
 ## Recommended
 **C**: C99 or above
 
-**C++**: C++ 03 or above
+**C++**: C++03 or above
 
 # Software
 ## Recommended
