@@ -6,15 +6,17 @@ First you need to download Visual Studio to compile the project.
 
 I recommend downloading `Visual Studio C++ 2008`, as all the code was written in it.
 
+> For `Visual Studio 2010` and above, use migration, but be aware that there may be consequences.
+
 -----
 
 Add files to the project.
 
-Include a `bin` folder in your compiler to store compiled files there.
-
 Include the main `Dolphin3D` library in this path: `../include/Dolphin3D.h`.
 
 Then you will need to write the script itself in `main.cpp`.
+
+Use the manual to write it.
 
 -----
 
@@ -35,6 +37,8 @@ The `_docs` folder contains text files for help and assistance in the graphics e
 The `examples` folder contains test projects. They are mainly needed for help, references, and for testing itself.
 
 The `bin` file contains the compiled project itself.
+
+The `tools` folder contains useful utilities.
 
 ----
 
