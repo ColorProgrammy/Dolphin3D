@@ -142,13 +142,15 @@ void renderColor(int i, int j, int width, size_t gradientSize, const char* gradi
         int r = currentcolor.getR();
         int g = currentcolor.getG();
         int b = currentcolor.getB();
-        if (r > 0) color |= FOREGROUND_RED;
-        if (g > 0) color |= FOREGROUND_GREEN;
-        if (b > 0) color |= FOREGROUND_BLUE;
+
+        if (r > 128) color |= FOREGROUND_RED;
+        if (g > 128) color |= FOREGROUND_GREEN;
+        if (b > 128) color |= FOREGROUND_BLUE;
         if (r > 128 && g > 128) color |= FOREGROUND_RED | FOREGROUND_GREEN;
         if (r > 128 && b > 128) color |= FOREGROUND_RED | FOREGROUND_BLUE;
         if (g > 128 && b > 128) color |= FOREGROUND_GREEN | FOREGROUND_BLUE;
         if (r > 128 && g > 128 && b > 128) color |= FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE;
+
         currentBuffer[i + j * width].Attributes = color ? color : 7;
     } else {
         currentBuffer[i + j * width].Attributes = 15;
@@ -161,7 +163,7 @@ void renderColor(int i, int j, int width, size_t gradientSize, const char* gradi
     }
 }
 
-void renderObjects(std::vector<Object*>& objects, vec3& ro, vec3& rd, bool& hit, Color& currentcolor, float& brightness, vec3& normal, vec3& light) {
+void renderObjects(std::vector<Object*>& objects, vec3& ro, vec3& rd, bool& hit, Color& currentcolor, float& brightness, vec3& normal, vec3& light, int shadowBrightness, int shadowDistance) {
     static bool firstCall = true;
     if (firstCall) {
         Log::write("\"renderObjects\" in progress...", 0);
@@ -194,7 +196,7 @@ void renderObjects(std::vector<Object*>& objects, vec3& ro, vec3& rd, bool& hit,
         vec3 lightDirection = norm(light - shadowRayOrigin + vec3(1e-3f));
         float lightDistance = length(light - shadowRayOrigin);
         bool inShadow = false;
-        const float maxShadowDistance = 3.0f;
+        float maxShadowDistance = shadowDistance;
 
 
         for (size_t k = 0; k < objects.size(); ++k) {
@@ -210,7 +212,7 @@ void renderObjects(std::vector<Object*>& objects, vec3& ro, vec3& rd, bool& hit,
         }
 
         if (inShadow) {
-            brightness *= 0.7f * (dot(normal, lightDirection) * 0.5f + 0.5f) * currentAlbedo;
+            brightness *= shadowBrightness * (dot(normal, lightDirection) * 0.5f + 0.5f) * currentAlbedo;
         } else {
             brightness *= (dot(normal, lightDirection) * 0.5f + 0.5f) * currentAlbedo;
         }
@@ -232,11 +234,11 @@ vec2 createUV(int i, int j, int width, int height) {
         Log::write("Creating UV...", 0);
         firstCall = false;
     }
-    // РљРѕСЂСЂРµРєС‚РёСЂРѕРІРєР° РґР»СЏ С†РµРЅС‚СЂРёСЂРѕРІР°РЅРёСЏ РїРёРєСЃРµР»РµР№
+    // Корректировка для центрирования пикселей
     float u = (i + 0.5f) / width * 2.0f - 1.0f;
     float v = (j + 0.5f) / height * 2.0f - 1.0f; // Invert the v coordinate
 
-    // РЈС‡РµС‚ СЃРѕРѕС‚РЅРѕС€РµРЅРёСЏ СЃС‚РѕСЂРѕРЅ РєРѕРЅСЃРѕР»СЊРЅС‹С… СЃРёРјРІРѕР»РѕРІ
+    // Учет соотношения сторон консольных символов
     float consoleAspect = 8.0f / 16.0f;
     u *= ((float)width / height) * consoleAspect;
 
