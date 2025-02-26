@@ -20,7 +20,7 @@ struct Config {
     int width;
     int height;
 	std::string logPath;
-
+	bool enableLogging;
 };
 
 inline Config readConfig(const std::string& filename) {
@@ -60,10 +60,16 @@ inline Config readConfig(const std::string& filename) {
                 } else if (key == "Height") {
                     std::istringstream(value) >> cfg.height;
                 }
+            }
+			if (section == "Logging") {  // НОВАЯ СЕКЦИЯ
+				if (key == "EnableLogging") {
+					cfg.enableLogging = (value == "true" || value == "1");
+			}
 				else if (key == "LogPath") {
 					cfg.logPath = value;
 				}
-            }
+			}
+
         }
     }
 
@@ -97,7 +103,7 @@ inline Config readConfigFromFullPath(const std::string& fullPath) {
             value.erase(0, value.find_first_not_of(" \t"));
             value.erase(value.find_last_not_of(" \t") + 1);
 
-            if (section == "Window") {
+                        if (section == "Window") {
                 if (key == "Title") {
                     cfg.title = value;
                 } else if (key == "IconPath") {
@@ -106,10 +112,16 @@ inline Config readConfigFromFullPath(const std::string& fullPath) {
                     std::istringstream(value) >> cfg.width;
                 } else if (key == "Height") {
                     std::istringstream(value) >> cfg.height;
-				} else if (key == "LogPath") {
+                }
+            }
+			if (section == "Logging") {  // НОВАЯ СЕКЦИЯ
+				if (key == "EnableLogging") {
+					cfg.enableLogging = (value == "true" || value == "1");
+			}
+				else if (key == "LogPath") {
 					cfg.logPath = value;
 				}
-            }
+			}
         }
     }
 
@@ -131,19 +143,26 @@ inline void copyConfigFile(const std::string& folderName, const std::string& con
     std::ofstream dstConfig(configDest.c_str(), std::ios::binary);
     dstConfig << srcConfig.rdbuf();
 
+	std::string copyConfigCommand = "copy /Y \"" + configFileName + "\" \"" + 
+                                  newFolderPath + "\\" + configFileName + "\"";
+    system(copyConfigCommand.c_str());
+
     std::string command = "xcopy /E /I /Y ..\\assets \"" + newFolderPath + "\\assets\"";
     system(command.c_str());
 }
 
 inline void createLogFile(const std::string& folderName, const Config& cfg) {
+    if (!cfg.enableLogging) {
+        return; // Если логирование отключено, ничего не делаем
+    }
+
     char documentsPath[MAX_PATH];
     SHGetFolderPathA(NULL, CSIDL_PERSONAL, NULL, 0, documentsPath);
     
-    Log::init(folderName, "log.txt");
-    
+    // Формируем полный путь к лог-файлу
     std::string fullPath = std::string(documentsPath) + "\\" + folderName + "\\" + cfg.logPath;
-    std::ofstream logFile(fullPath.c_str(), std::ios::out | std::ios::trunc);
     
+    // Создаем директорию для логов, если она не существует
     std::string dirPath = std::string(documentsPath) + "\\" + folderName;
     size_t pos = cfg.logPath.find_last_of("\\/");
     if (pos != std::string::npos) {
@@ -156,22 +175,27 @@ inline void createLogFile(const std::string& folderName, const Config& cfg) {
                 exit(1);
             }
         }
-    } else {
-		std::ofstream file(fullPath.c_str(), std::ios::trunc);
-        Log::write("Title: " + cfg.title);
-        std::stringstream ss;
-        ss << "Window size: " << cfg.width << " x " << cfg.height;
-        Log::write(ss.str());
-        Log::write("---");
-        Log::write("Loading...");
-        Log::write("---");
-        Log::write("Application opened.");
-
-        SetConsoleCtrlHandler(ConsoleHandler, TRUE);
-        
-        std::cout << "Log file created successfully: " << fullPath << std::endl;
     }
-    logFile.close();
+
+    // Инициализируем лог-систему (Log::init должен открыть файл для записи)
+    Log::init(folderName, cfg.logPath);
+
+	std::stringstream ss;
+	ss << "Window size: " << cfg.width << " x " << cfg.height;
+
+    // Записываем начальные данные в лог через Log::write (если такая функция есть)
+    Log::write("Title: " + cfg.title);
+    Log::write(ss.str());
+    Log::write("---");
+    Log::write("Loading...");
+    Log::write("---");
+    Log::write("Application opened.");
+
+    // Устанавливаем обработчик завершения программы
+    SetConsoleCtrlHandler(ConsoleHandler, TRUE);
+
+    // Сообщаем об успешной инициализации логов
+    std::cout << "Log file created successfully: " << fullPath << std::endl;
 }
 
 inline void setIcon(const Config& cfg, const std::string& folderName) {
