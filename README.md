@@ -1,12 +1,9 @@
 # A graphic engine
 
-### Dolphin3D CL
+### Dolphin3D
+`Version: v1.0.0a`
 
-`v1.0.0a build 1`
-
-https://github.com/user-attachments/assets/74517561-27bb-4014-9b4f-23cb769e4082
-
-Dolphin3D CL is an open source framework for console 3D rendering. It's easy to use. There are templates to help you create renderings. The scripting itself is done in C-based languages, but we've kept it as simple as possible so you can easily write code.
+Dolphin3D is an open source framework for console 3D rendering. It's easy to use. There are templates to help you create renderings. The scripting itself is done in C-based languages, but we've kept it as simple as possible so you can easily write code.
 
 Our engine is unique, easy to write code and has a wide range of functions.
 
