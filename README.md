@@ -1,6 +1,6 @@
-# A graphic engine
+# Dolphin3D
 
-### Dolphin3D
+### A graphic engine
 `Version: v1.0.0a`
 
 Dolphin3D is an open source framework for console 3D rendering. It's easy to use. There are templates to help you create renderings. The scripting itself is done in C-based languages, but we've kept it as simple as possible so you can easily write code.
