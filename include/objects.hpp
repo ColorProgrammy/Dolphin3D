@@ -3,36 +3,9 @@
 #include "Vector2.h"
 #include "Vector3.h"
 #include "Vector4.h"
+#include "mat4.h"
 #include "color.h"
 #include <memory>
-
-inline bool rayTriangleIntersect(const vec3& ro, const vec3& rd, 
-                          const vec3& v0, const vec3& v1, const vec3& v2, 
-                          float& t, vec3& normal) {
-    vec3 edge1 = v1 - v0;
-    vec3 edge2 = v2 - v0;
-    vec3 h = cross(rd, edge2);
-    float a = dot(edge1, h);
-    if (a > -1e-6 && a < 1e-6) return false;
-
-    float f = 1.0 / a;
-    vec3 s = ro - v0;
-    float u = f * dot(s, h);
-    if (u < 0.0 || u > 1.0) return false;
-
-    vec3 q = cross(s, edge1);
-    float v = f * dot(rd, q);
-    if (v < 0.0 || u + v > 1.0) return false;
-
-    t = f * dot(edge2, q);
-    if (t > 1e-6) {
-        normal = norm(cross(edge1, edge2));
-        return true;
-    }
-
-    return false;
-}
-
 
 inline vec2 sphere(vec3 ro, vec3 rd, float r) {
 	float b = dot(ro, rd);
@@ -150,50 +123,104 @@ inline vec3 cylNormal(const vec3& p, const vec3& a, const vec3& b, float ra) {
     return (pa - ba * h) / ra;
 }
 
-
-
-
 class Object {
+protected:
+    mat4 transform; // Transformation matrix of the object.
+    vec3 pos;       // Position of the object.
+
 public:
     float albedo;
     Color color;
-    Object() : albedo(0.0f), color(Color::White()) {}
-    Object(float albedo, const Color& color = Color::White()) : albedo(albedo), color(color) {}
-    virtual bool set(vec3 ro, vec3 rd,  float& dist, vec3& n) = 0;
+
+    Object() : albedo(0.0f), color(Color::White()), pos(vec3(0, 0, 0)) {
+        transform = mat4::identity(); // Initialize to identity matrix
+    }
+
+    Object(float albedo, const Color& color = Color::White(), const vec3& position = vec3(0, 0, 0))
+        : albedo(albedo), color(color), pos(position) {
+        transform = mat4::identity(); // Initialize
+        setPosition(position); // Set initial position.
+    }
+
+    virtual bool set(vec3 ro, vec3 rd, float& dist, vec3& n) = 0;
     virtual ~Object() {}
+
     virtual float getAlbedo() const { return albedo; }
     virtual Color getColor() const { return color; }
-	virtual void setPosition(const vec3& pos) = 0;
-	virtual void setColor(const Color& color) = 0;
 
+    virtual void setPosition(const vec3& position) {
+        // Instead of calculating the difference, create a translation matrix directly to the new position.
+        transform = mat4::translate(position) *  getRotationMatrix();  // IMPORTANT: Preserve rotation
+        pos = position;
+    }
+
+    virtual void setColor(const Color& color) {
+        this->color = color;
+    }
+
+    // Extract rotation part of the transform matrix
+    mat4 getRotationMatrix() const {
+		mat4 rotation = transform;
+		rotation.m[0][3] = 0.0f;
+		rotation.m[1][3] = 0.0f;
+		rotation.m[2][3] = 0.0f;
+		return rotation;
+	}
+
+    virtual void rotateLocalX(float angle) {
+		mat4 rotation = getRotationMatrix() * mat4::rotateX(angle);
+		transform = mat4::translate(pos) * rotation;
+	}
+
+	virtual void rotateLocalY(float angle) {
+		mat4 rotation = getRotationMatrix() * mat4::rotateY(angle);
+		transform = mat4::translate(pos) * rotation;
+	}
+
+	virtual void rotateLocalZ(float angle) {
+		mat4 rotation = getRotationMatrix() * mat4::rotateZ(angle);
+		transform = mat4::translate(pos) * rotation;
+	}
+
+    virtual void translate(const vec3& t) {
+        transform = mat4::translate(t) * transform;
+        pos += t;
+    }
+
+    vec3 getPosition() const {
+        return pos; // Return the object's position
+    }
 };
 
 class Box : public Object {
 private:
-    vec3 pos;
     vec3 size;
     float dist;
     vec3 n;
 
 public:
-    Box() : pos(), size(), dist(10000.0f), n(), Object() {}
     Box(vec3 pos, vec3 size, float albedo, const Color& color = Color::White())
-        : pos(pos), size(size), dist(10000.0f), n(), Object(albedo, color) {}
+        : Object(albedo, color, pos), size(size) {}
 
-    bool set(vec3 ro, vec3 rd, float& dist, vec3& n) override {
-        vec2 intersection = box(ro - pos, rd, size.x, size.y, size.z, n);
-        if (intersection.x > 0 && intersection.x < dist) {
-            dist = intersection.x;
-            return true;
-        }
-        return false;
+    bool Box::set(vec3 ro, vec3 rd, float& dist, vec3& n) {
+		mat4 invTransform = transform.inverse();
+		vec3 localRo = invTransform * ro;
+		vec3 localRd = invTransform.rotateVector(rd);
+
+		vec2 intersection = box(localRo, localRd, size.x, size.y, size.z, n);
+		if (intersection.x > 0) {
+			dist = intersection.x;
+			n = norm(transform.rotateVector(n)); // Нормализация нормали
+			return true;
+		}
+		return false;
+	}
+
+    void rotateLocalY(float angle) {
+        Object::rotateLocalY(angle); // Вращение вокруг собственной оси Y
     }
 
-    void setPosition(const vec3& pos) override {
-        this->pos = pos;
-    }
-
-	void setColor(const Color& color) override {
+    void setColor(const Color& color) override {
         this->color = color;
     }
 
@@ -233,46 +260,6 @@ public:
         this->color = color;
     }
 };
-
-class MeshObject : public Object {
-private:
-    Mesh mesh;
-    vec3 position;
-
-public:
-    MeshObject(const std::string& filename, const vec3& pos, float albedo, const Color& color = Color::White())
-        : position(pos), Object(albedo, color) {
-        mesh.loadFromOBJ(filename);
-    }
-
-    bool set(vec3 ro, vec3 rd, float& dist, vec3& n) override {
-        bool hit = false;
-        for (const auto& face : mesh.faces) {
-            if (face.size() < 3) continue;  // Пропуск некорректных граней
-            vec3 v0 = mesh.vertices[face[0]] + position;
-            vec3 v1 = mesh.vertices[face[1]] + position;
-            vec3 v2 = mesh.vertices[face[2]] + position;
-
-            float t;
-            vec3 normal;
-            if (rayTriangleIntersect(ro, rd, v0, v1, v2, t, normal) && t < dist) {
-                dist = t;
-                n = normal;
-                hit = true;
-            }
-        }
-        return hit;
-    }
-
-    void setPosition(const vec3& pos) override {
-        position = pos;
-    }
-
-    void setColor(const Color& color) override {
-        this->color = color;
-    }
-};
-
 
 class Sphere : public Object {
 private:
