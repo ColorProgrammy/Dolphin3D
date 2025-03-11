@@ -61,7 +61,7 @@ inline Config readConfig(const std::string& filename) {
                     std::istringstream(value) >> cfg.height;
                 }
             }
-			if (section == "Logging") {  // НОВАЯ СЕКЦИЯ
+			if (section == "Logging") {
 				if (key == "EnableLogging") {
 					cfg.enableLogging = (value == "true" || value == "1");
 			}
@@ -103,7 +103,7 @@ inline Config readConfigFromFullPath(const std::string& fullPath) {
             value.erase(0, value.find_first_not_of(" \t"));
             value.erase(value.find_last_not_of(" \t") + 1);
 
-                        if (section == "Window") {
+            if (section == "Window") {
                 if (key == "Title") {
                     cfg.title = value;
                 } else if (key == "IconPath") {
@@ -114,7 +114,7 @@ inline Config readConfigFromFullPath(const std::string& fullPath) {
                     std::istringstream(value) >> cfg.height;
                 }
             }
-			if (section == "Logging") {  // НОВАЯ СЕКЦИЯ
+			if (section == "Logging") {
 				if (key == "EnableLogging") {
 					cfg.enableLogging = (value == "true" || value == "1");
 			}
@@ -147,22 +147,28 @@ inline void copyConfigFile(const std::string& folderName, const std::string& con
                                   newFolderPath + "\\" + configFileName + "\"";
     system(copyConfigCommand.c_str());
 
-    std::string command = "xcopy /E /I /Y ..\\assets \"" + newFolderPath + "\\assets\"";
-    system(command.c_str());
+    std::string assetsPath = "..\\assets";
+    DWORD fileAttributes = GetFileAttributesA(assetsPath.c_str());
+
+    if (fileAttributes != INVALID_FILE_ATTRIBUTES && (fileAttributes & FILE_ATTRIBUTE_DIRECTORY)) {
+        std::string command = "xcopy /E /I /Y ..\\assets \"" + newFolderPath + "\\assets\"";
+        system(command.c_str());
+        std::cout << "Assets folder copied successfully." << std::endl;
+    } else {
+        std::cout << "Assets folder not found. Skipping copy." << std::endl;
+    }
 }
 
 inline void createLogFile(const std::string& folderName, const Config& cfg) {
     if (!cfg.enableLogging) {
-        return; // Если логирование отключено, ничего не делаем
+        return;
     }
 
     char documentsPath[MAX_PATH];
     SHGetFolderPathA(NULL, CSIDL_PERSONAL, NULL, 0, documentsPath);
-    
-    // Формируем полный путь к лог-файлу
+
     std::string fullPath = std::string(documentsPath) + "\\" + folderName + "\\" + cfg.logPath;
-    
-    // Создаем директорию для логов, если она не существует
+
     std::string dirPath = std::string(documentsPath) + "\\" + folderName;
     size_t pos = cfg.logPath.find_last_of("\\/");
     if (pos != std::string::npos) {
@@ -177,13 +183,11 @@ inline void createLogFile(const std::string& folderName, const Config& cfg) {
         }
     }
 
-    // Инициализируем лог-систему (Log::init должен открыть файл для записи)
     Log::init(folderName, cfg.logPath);
 
 	std::stringstream ss;
 	ss << "Window size: " << cfg.width << " x " << cfg.height;
 
-    // Записываем начальные данные в лог через Log::write (если такая функция есть)
     Log::write("Title: " + cfg.title);
     Log::write(ss.str());
     Log::write("---");
@@ -191,10 +195,10 @@ inline void createLogFile(const std::string& folderName, const Config& cfg) {
     Log::write("---");
     Log::write("Application opened.");
 
-    // Устанавливаем обработчик завершения программы
+    // вЂќСЃС‚Р°РЅР°РІР»РёРІР°РµРј РѕР±СЂР°Р±РѕС‚С‡РёРє Р·Р°РІРµСЂС€РµРЅРёВ¤ РїСЂРѕРіСЂР°РјРјС‹
     SetConsoleCtrlHandler(ConsoleHandler, TRUE);
 
-    // Сообщаем об успешной инициализации логов
+    // вЂ”РѕРѕР±С‰Р°РµРј РѕР± СѓСЃРїРµС€РЅРѕР№ РёРЅРёС†РёР°Р»РёР·Р°С†РёРё Р»РѕРіРѕРІ
     std::cout << "Log file created successfully: " << fullPath << std::endl;
 }
 
