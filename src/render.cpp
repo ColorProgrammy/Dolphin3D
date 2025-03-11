@@ -1,4 +1,13 @@
-#include "../include/Dolphin3D.h"
+#include "../include/globals.h"
+#include "../include/Vector2.h"
+#include "../include/Vector3.h"
+#include "../include/functions.h"
+#include "../include/setup.h"
+#include "../include/objects.hpp"
+#include "../include/color.h"
+#include "../include/render.h"
+#include "../include/log.h"
+
 #include <iostream>
 #include <cstring>
 #include <cmath>
@@ -163,7 +172,7 @@ void renderColor(int i, int j, int width, size_t gradientSize, const char* gradi
     }
 }
 
-void renderObjects(std::vector<Object*>& objects, vec3& ro, vec3& rd, bool& hit, Color& currentcolor, float& brightness, vec3& normal, vec3& light, int shadowBrightness, int shadowDistance) {
+void renderObjects(std::vector<Object*>& objects, vec3& ro, vec3& rd, bool& hit, Color& currentcolor, float& brightness, vec3& normal, vec3& light, int shadowBrightness, float shadowDistance) {
     static bool firstCall = true;
     if (firstCall) {
         Log::write("\"renderObjects\" in progress...", 0);
@@ -177,12 +186,10 @@ void renderObjects(std::vector<Object*>& objects, vec3& ro, vec3& rd, bool& hit,
     hit = false;
     currentcolor = Color::Black();
 
-
-
     for (size_t k = 0; k < objects.size(); ++k) {
         Object* obj = objects[k];
         if (obj->set(ro, rd, currentDist, normal)) {
-            if (currentDist < minDist) {
+            if (currentDist < minDist && currentDist > 0.001f) {
                 minDist = currentDist;
                 currentAlbedo = obj->getAlbedo();
                 currentcolor = obj->getColor();
@@ -192,19 +199,18 @@ void renderObjects(std::vector<Object*>& objects, vec3& ro, vec3& rd, bool& hit,
     }
 
     if (currentDist < 99999.0f && hit) {
-        vec3 shadowRayOrigin = ro + rd * (currentDist - 0.01f);
+        vec3 shadowRayOrigin = ro + rd * (minDist - 0.01f);
         vec3 lightDirection = norm(light - shadowRayOrigin + vec3(1e-3f));
         float lightDistance = length(light - shadowRayOrigin);
         bool inShadow = false;
         float maxShadowDistance = shadowDistance;
-
 
         for (size_t k = 0; k < objects.size(); ++k) {
             Object* obj = objects[k];
             vec3 shadowNormal;
             float shadowDist = FLT_MAX;
             if (obj->set(shadowRayOrigin, lightDirection, shadowDist, shadowNormal)) {
-                if (shadowDist < lightDistance && shadowDist < maxShadowDistance) {
+                if (shadowDist < lightDistance && shadowDist < maxShadowDistance && shadowDist > 0.001f) {
                     inShadow = true;
                     break;
                 }
@@ -217,7 +223,7 @@ void renderObjects(std::vector<Object*>& objects, vec3& ro, vec3& rd, bool& hit,
             brightness *= (dot(normal, lightDirection) * 0.5f + 0.5f) * currentAlbedo;
         }
 
-        ro = ro + rd * (currentDist - 0.01f);
+        ro = ro + rd * (minDist - 0.01f);
         brightness = max(brightness, 0.0f);
     }
 
@@ -234,11 +240,11 @@ vec2 createUV(int i, int j, int width, int height) {
         Log::write("Creating UV...", 0);
         firstCall = false;
     }
-    // Корректировка для центрирования пикселей
+    // РљРѕСЂСЂРµРєС‚РёСЂРѕРІРєР° РґР»СЏ С†РµРЅС‚СЂРёСЂРѕРІР°РЅРёСЏ РїРёРєСЃРµР»РµР№
     float u = (i + 0.5f) / width * 2.0f - 1.0f;
     float v = (j + 0.5f) / height * 2.0f - 1.0f; // Invert the v coordinate
 
-    // Учет соотношения сторон консольных символов
+    // РЈС‡РµС‚ СЃРѕРѕС‚РЅРѕС€РµРЅРёСЏ СЃС‚РѕСЂРѕРЅ РєРѕРЅСЃРѕР»СЊРЅС‹С… СЃРёРјРІРѕР»РѕРІ
     float consoleAspect = 8.0f / 16.0f;
     u *= ((float)width / height) * consoleAspect;
 
