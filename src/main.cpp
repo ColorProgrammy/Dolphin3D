@@ -6,98 +6,89 @@
 #include <conio.h>
 #include "../include/Dolphin3D.h"
 
-
-DWORD WINAPI changeBoxColor(LPVOID lpParam) {
-    Box* box = static_cast<Box*>(lpParam);
-    while (true) {
-        box->setColor(Color::Green());
-        Sleep(1000);
-        box->setColor(Color::Yellow());
-        Sleep(1000);
-        box->setColor(Color::Cyan());
-        Sleep(1000);
-        box->setColor(Color::White());
-        Sleep(1000);
-        box->setColor(Color::Blue());
-        Sleep(1000);
-    }
-    return 0;
-}
-
 int main() {
-    Config cfg;
-    if (!setConfig(folderName, configPath, cfg)) {
-        return 1;
-    }
-
-    bool hit;
-    Color currentcolor;
-    vec3 normal;
-
-    int width = cfg.width;
-    int height = cfg.height;
-
+    int width = 100;
+    int height = 30;
 
     setBuffer(width, height);
     initRender(width, height);
-    setWindow(width, height, cfg.title);
+    setWindow(width, height, "Title");
+    system("cls");
 
-	setIcon(cfg, folderName);
-
-    char gradient[] = GRADIENT_0;
+	const char* gradientName = GRADIENT_0;
     size_t gradientSize = 0;
 
-	setGradientSize(gradient, gradientSize);
+    const size_t maxGradientSize = 100;
+    char gradient[maxGradientSize];
 
-    vec3 boxPos = vec3(0, 0, -2);
-    vec3 planePos = vec3(0, 0, -3);
-    vec3 spherePos = vec3(-4, 0, -1);
-    vec3 capPos = vec3(0, 0, -7);
-    vec3 light = vec3(0, 20, -7.0);
+    strncpy(gradient, gradientName, maxGradientSize);
+    gradient[maxGradientSize - 1] = '\0';
+    setGradientSize(gradient, gradientSize);
 
     std::vector<Object*> objects;
-    objects.push_back(new Plane(planePos, vec3(0, 1, 0), 0.5f, Color::White()));
-    objects.push_back(new Sphere(spherePos, 1.5f, 2.0f, Color::Yellow()));
-    
-	Box* testBox = new Box(boxPos, vec3(2,2,2), 1.0f, Color::Blue());
-    objects.push_back(testBox);
 
-	vec3 cylinderA(6.0f, 0.0f, -1.0f);
-    vec3 cylinderB(6.0f, 2.0f, -1.0f);
-    float cylinderRadius = 1.5f;
-    objects.push_back(new Cylinder(cylinderA, cylinderB, cylinderRadius, 2.0f, Color::Green()));
+    vec3 planePos = vec3(0, 0, -5);
+    objects.push_back(new Plane(planePos, vec3(0, 1, 0), 1.5f, Color::Green()));
 
-	HANDLE colorChangeThread = CreateThread(NULL, 0, changeBoxColor, testBox, 0, NULL);
+    vec3 boxPos = vec3(-5, 0, -4);
+    Box* box = new Box(boxPos, vec3(2.0f, 2.0f, 1.0f), 3.5f, Color::Blue());
+    objects.push_back(box);
 
+	vec3 boxPos1 = vec3(0, 3, -5);
+    Box* box1 = new Box(boxPos1, vec3(1.0f, 3.0f, 1.0f), 3.5f, Color::Yellow());
+    objects.push_back(box1);
 
-    for (int t = 1; t > 0; ++t) {
+    objects.push_back(new Box(vec3(0, 0, 0), vec3(1.0f, 3.0f, 1.0f), 5.5f, Color::White()));
+
+    vec3 light = vec3(0, 500, -5);
+
+	int io = 1;
+
+    while (true) {
         swapBuffers(currentBuffer, displayBuffer, width, height);
+		io += 1;
+		box->rotateLocalY(0.05f);
+		box->rotateLocalZ(0.02f);
+
+		box1->rotateLocalX(0.02f);
+		box1->rotateLocalZ(0.08f);
 
         for (int j = 0; j < height; ++j) {
             for (int i = 0; i < width; ++i) {
+                float brightness = 0.2f;
 
-                float brightness = 1.0f;
+				
 
                 vec2 uv = createUV(i, j, width, height);
-
                 vec3 rd = norm(vec3(1, uv));
-                vec3 ro = vec3(-7, 0, -1);		
+                vec3 ro = vec3(-11, 0, -2);
 
                 rd = rotateAroundCenterY(rd, 0.5f);
                 ro = rotateAroundCenterY(ro, 0.5f);
-                ro = rotateAroundCenterZ(ro, t * 0.01f);
-                rd = rotateAroundCenterZ(rd, t * 0.01f);
 
-                renderObjects(objects, ro, rd, hit, currentcolor, brightness, normal, light);
+				rd = rotateAroundCenterZ(rd, io * 0.03f);
+                ro = rotateAroundCenterZ(ro, io * 0.03f);
+
+                bool hit = false;
+                Color currentcolor;
+                vec3 normal;
+                renderObjects(objects, ro, rd, hit, currentcolor, brightness, normal, light, 0.7f, 2);
+
                 renderColor(i, j, width, gradientSize, gradient, hit, currentcolor, brightness);
             }
         }
-        render(width, height);
+
+        render(width, height, 60);
+
+        if (_kbhit()) {
+            char key = _getch();
+            if (key == KEY_ESC) {
+                break;
+            }
+        }
     }
 
-	WaitForSingleObject(colorChangeThread, INFINITE);
     freeBuffers();
     freeObjects(objects);
-
     return 0;
 }
