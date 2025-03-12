@@ -58,6 +58,23 @@ void render(int width, int height, int fps) {
 
     WriteConsoleOutput(hConsole, displayBuffer, bufferSize, coord, &rect);
 
+	if (hConsole == INVALID_HANDLE_VALUE) {
+		_getch();
+        exit(1);
+    }
+
+    CONSOLE_CURSOR_INFO cursorInfo;
+    if (!GetConsoleCursorInfo(hConsole, &cursorInfo)) {
+		_getch();
+        exit(1);
+    }
+
+    cursorInfo.bVisible = FALSE;
+    if (!SetConsoleCursorInfo(hConsole, &cursorInfo)) {
+		_getch();
+        exit(1);
+    }
+
     if (fps > 0) {
         // Calculate the sleep duration based on the desired frame rate
         int sleepDuration = 1000 / fps;
@@ -172,25 +189,29 @@ void renderColor(int i, int j, int width, size_t gradientSize, const char* gradi
     }
 }
 
-void renderObjects(std::vector<Object*>& objects, vec3& ro, vec3& rd, bool& hit, Color& currentcolor, float& brightness, vec3& normal, vec3& light, int shadowBrightness, float shadowDistance) {
+void renderObjects(std::vector<Object*>& objects, vec3& ro, vec3& rd, bool& hit, Color& currentcolor, float& brightness, vec3& normal, vec3& light, float shadowBrightness, float shadowDistance) {
     static bool firstCall = true;
     if (firstCall) {
         Log::write("\"renderObjects\" in progress...", 0);
         firstCall = false;
     }
 
-    float lightRadius = 1.0f;
     float minDist = FLT_MAX;
-    float currentAlbedo = 1.0f;
-    float currentDist = FLT_MAX;
     hit = false;
     currentcolor = Color::Black();
+    Object* closestObj = NULL;
+    float currentAlbedo = 1.0f;
 
+    // Find the closest object with correct reset of currentDist
     for (size_t k = 0; k < objects.size(); ++k) {
         Object* obj = objects[k];
-        if (obj->set(ro, rd, currentDist, normal)) {
+        float currentDist = FLT_MAX;
+        vec3 n;
+        if (obj->set(ro, rd, currentDist, n)) {
             if (currentDist < minDist && currentDist > 0.001f) {
                 minDist = currentDist;
+                normal = n;
+                closestObj = obj;
                 currentAlbedo = obj->getAlbedo();
                 currentcolor = obj->getColor();
                 hit = true;
@@ -198,19 +219,25 @@ void renderObjects(std::vector<Object*>& objects, vec3& ro, vec3& rd, bool& hit,
         }
     }
 
-    if (currentDist < 99999.0f && hit) {
-        vec3 shadowRayOrigin = ro + rd * (minDist - 0.01f);
-        vec3 lightDirection = norm(light - shadowRayOrigin + vec3(1e-3f));
+    if (hit) {
+
+		// Offset to avoid self-intersection (adaptive)
+        float bias = max(0.01f, minDist * 0.001f);
+		///
+
+        vec3 shadowRayOrigin = ro + rd * (minDist - bias);
+        vec3 lightDirection = norm(light - shadowRayOrigin);
         float lightDistance = length(light - shadowRayOrigin);
         bool inShadow = false;
-        float maxShadowDistance = shadowDistance;
 
         for (size_t k = 0; k < objects.size(); ++k) {
             Object* obj = objects[k];
+            if (obj == closestObj) continue;
+
             vec3 shadowNormal;
             float shadowDist = FLT_MAX;
             if (obj->set(shadowRayOrigin, lightDirection, shadowDist, shadowNormal)) {
-                if (shadowDist < lightDistance && shadowDist < maxShadowDistance && shadowDist > 0.001f) {
+                if (shadowDist > 0.001f && shadowDist < lightDistance) {
                     inShadow = true;
                     break;
                 }
@@ -225,11 +252,14 @@ void renderObjects(std::vector<Object*>& objects, vec3& ro, vec3& rd, bool& hit,
 
         ro = ro + rd * (minDist - 0.01f);
         brightness = max(brightness, 0.0f);
+
+        // Update the ray position
+        ro = shadowRayOrigin;
     }
 
     static bool firstSuccess = true;
     if (firstSuccess) {
-        Log::write("Object rendering initialized successfully", 1);
+        Log::write("Object rendering initialized successfully", 1); // :D
         firstSuccess = false;
     }
 }
@@ -240,11 +270,9 @@ vec2 createUV(int i, int j, int width, int height) {
         Log::write("Creating UV...", 0);
         firstCall = false;
     }
-    // Корректировка для центрирования пикселей
     float u = (i + 0.5f) / width * 2.0f - 1.0f;
     float v = (j + 0.5f) / height * 2.0f - 1.0f; // Invert the v coordinate
 
-    // Учет соотношения сторон консольных символов
     float consoleAspect = 8.0f / 16.0f;
     u *= ((float)width / height) * consoleAspect;
 
