@@ -6,7 +6,6 @@
 
 mat4 transform;
 
-
 inline vec3 rotateAroundCenterX(vec3 a, double angle)
 {
 	vec3 b = a;
@@ -55,7 +54,7 @@ inline vec3 rotateAroundZ(vec3 a, double angle, vec3 origin)
     return b + origin;
 }
 
-inline mat4 getRotationMatrix() const {
+inline mat4 getRotationMatrix() {
     mat4 rotation = transform;
     
     rotation.m[0][3] = 0.0f;
