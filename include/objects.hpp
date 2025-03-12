@@ -1,3 +1,11 @@
+/* 
+File: objects.hpp
+Developer: ColorProgrammy
+
+Description:
+Ray intersections with objects, object adjustments, etc.
+*/
+
 #pragma once
 #include "functions.h"
 #include "Vector2.h"
@@ -6,6 +14,9 @@
 #include "mat4.h"
 #include "color.h"
 #include <memory>
+
+/////
+// Intersections of rays
 
 inline vec2 sphere(vec3 ro, vec3 rd, float r) {
 	float b = dot(ro, rd);
@@ -123,6 +134,12 @@ inline vec3 cylNormal(const vec3& p, const vec3& a, const vec3& b, float ra) {
     return (pa - ba * h) / ra;
 }
 
+//
+/////
+
+/////
+// Creating objects and configuring them
+
 class Object {
 protected:
     mat4 transform; // Transformation matrix of the object.
@@ -150,7 +167,7 @@ public:
 
     virtual void setPosition(const vec3& position) {
         // Instead of calculating the difference, create a translation matrix directly to the new position.
-        transform = mat4::translate(position) *  getRotationMatrix();  // IMPORTANT: Preserve rotation
+        transform = mat4::translate(position) *  getRotationMatrix();
         pos = position;
     }
 
@@ -417,3 +434,6 @@ public:
     vec3 getB() const { return b; }
     float getRadius() const { return radius; }
 };
+
+//
+/////
