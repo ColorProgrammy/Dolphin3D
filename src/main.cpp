@@ -12,18 +12,14 @@ int main() {
 
     setBuffer(width, height);
     initRender(width, height);
-    setWindow(width, height, "Title");
+    setWindow(width, height, "Dolphin3D Demo");
     system("cls");
 
-	const char* gradientName = GRADIENT_0;
     size_t gradientSize = 0;
-
     const size_t maxGradientSize = 100;
     char gradient[maxGradientSize];
 
-    strncpy(gradient, gradientName, maxGradientSize);
-    gradient[maxGradientSize - 1] = '\0';
-    setGradientSize(gradient, gradientSize);
+    setGradientSize(gradient, gradientSize, maxGradientSize, GRADIENT_0);
 
     std::vector<Object*> objects;
 
@@ -47,6 +43,7 @@ int main() {
     while (true) {
         swapBuffers(currentBuffer, displayBuffer, width, height);
 		io += 1;
+
 		box->rotateLocalY(0.05f);
 		box->rotateLocalZ(0.02f);
 
@@ -56,8 +53,6 @@ int main() {
         for (int j = 0; j < height; ++j) {
             for (int i = 0; i < width; ++i) {
                 float brightness = 0.2f;
-
-				
 
                 vec2 uv = createUV(i, j, width, height);
                 vec3 rd = norm(vec3(1, uv));
@@ -72,9 +67,9 @@ int main() {
                 bool hit = false;
                 Color currentcolor;
                 vec3 normal;
-                renderObjects(objects, ro, rd, hit, currentcolor, brightness, normal, light, 0.7f, 2);
+                setObjects(objects, ro, rd, hit, currentcolor, brightness, normal, light, 0.7f, 2);
 
-                renderColor(i, j, width, gradientSize, gradient, hit, currentcolor, brightness);
+                setColors(i, j, width, gradientSize, gradient, hit, currentcolor, brightness);
             }
         }
 
