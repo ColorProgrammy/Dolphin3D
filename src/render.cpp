@@ -151,10 +151,10 @@ void freeObjects(std::vector<Object*>& objects) {
     }
 }
 
-void renderColor(int i, int j, int width, size_t gradientSize, const char* gradient, bool hit, Color currentcolor, float brightness) {
+void setColors(int i, int j, int width, size_t gradientSize, const char* gradient, bool hit, Color currentcolor, float brightness) {
     static bool firstCall = true;
     if (firstCall) {
-        Log::write("\"renderColor\" in progress...", 0);
+        Log::write("\"setColors\" in progress...", 0);
         firstCall = false;
     }
 
@@ -184,15 +184,15 @@ void renderColor(int i, int j, int width, size_t gradientSize, const char* gradi
 
     static bool firstSuccess = true;
     if (firstSuccess) {
-        Log::write("Color rendering initialized successfully", 1);
+        Log::write("Color setting initialized successfully", 1);
         firstSuccess = false;
     }
 }
 
-void renderObjects(std::vector<Object*>& objects, vec3& ro, vec3& rd, bool& hit, Color& currentcolor, float& brightness, vec3& normal, vec3& light, float shadowBrightness, float shadowDistance) {
+void setObjects(std::vector<Object*>& objects, vec3& ro, vec3& rd, bool& hit, Color& currentcolor, float& brightness, vec3& normal, vec3& light, float shadowBrightness, float shadowDistance) {
     static bool firstCall = true;
     if (firstCall) {
-        Log::write("\"renderObjects\" in progress...", 0);
+        Log::write("\"setObjects\" in progress...", 0);
         firstCall = false;
     }
 
@@ -259,7 +259,7 @@ void renderObjects(std::vector<Object*>& objects, vec3& ro, vec3& rd, bool& hit,
 
     static bool firstSuccess = true;
     if (firstSuccess) {
-        Log::write("Object rendering initialized successfully", 1); // :D
+        Log::write("Object setting initialized successfully", 1); // :D
         firstSuccess = false;
     }
 }
