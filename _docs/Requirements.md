@@ -2,15 +2,19 @@
 
 ## Minimal
 ### OS
-**Windows Vista**
+**Windows 95 (to play games) or Windows Vista (to create games)**
 ### Memory
 Free memory space **10 MB**
+### CPU
+**potato 1**
 
 ## Recommended
 ### OS
 **Windows Vista (Service Pack 2)** and above
 ### Memory
 Free memory space **100 MB** and above
+### CPU
+**potato 2**
 
 # C/C++ version
 ## Minimal
