@@ -197,28 +197,25 @@ void createSpotlight(std::vector<Light>& lights, vec3 position, vec3 direction, 
     lights.push_back(Light(position, direction, intensity, radius, angle));
 }
 
-void createDirectionalLight(std::vector<Light>& lights, vec3 position, vec3 direction, float intensity, float width, float range) {
-    // Используем конструктор прожектора, но меняем тип на DIRECTIONAL
-    lights.push_back(Light(position, direction, intensity, range, width));
-    lights.back().type = LIGHT_DIRECTIONAL; // Меняем тип после создания
+void createDirectionalLight(std::vector<Light>& lights, vec3 position, vec3 direction, 
+                           float intensity, float angle, float range) {
+    Light light(position, norm(direction), intensity, range, angle);
+    light.type = LIGHT_DIRECTIONAL;
+    lights.push_back(light);
 }
 
 void setObjects(std::vector<Object*>& objects, vec3& ro, vec3& rd, bool& hit, 
                Color& currentcolor, float& brightness, vec3& normal, 
                std::vector<Light>& lights, float shadowBrightness, 
                float shadowDistance) {
-    static bool firstCall = true;
-    if (firstCall) {
-        Log::write("\"setObjects\" in progress...", 0);
-        firstCall = false;
-    }
-
+    
     float minDist = FLT_MAX;
     hit = false;
     currentcolor = Color::Black();
     Object* closestObj = NULL;
     float currentAlbedo = 1.0f;
 
+    // Найти ближайший объект
     for (size_t k = 0; k < objects.size(); ++k) {
         Object* obj = objects[k];
         float currentDist = FLT_MAX;
@@ -240,105 +237,114 @@ void setObjects(std::vector<Object*>& objects, vec3& ro, vec3& rd, bool& hit,
         vec3 hitPoint = ro + rd * (minDist - bias);
         brightness = 0.1f; // Базовое окружающее освещение
 
+        // Обработка ВСЕХ источников света
         for (size_t l = 0; l < lights.size(); ++l) {
             Light& light = lights[l];
             
-            if (light.type == LIGHT_DIRECTIONAL) {
-    // Для направленного света - используем физику точечного света
-    vec3 toLight = light.position - hitPoint;
-    float lightDist = length(toLight);
-    vec3 lightDir = norm(toLight);
-    
-    // Проверяем, находится ли точка в пределах конуса направленного света
-    vec3 lightMainDir = norm(light.direction);
-    float cosAngle = dot(lightDir, lightMainDir);
-    float angleThreshold = cos(light.angle * 0.5f);
-    
-    if (cosAngle < angleThreshold) continue;
-    
-    // Затухание как у точечного света
-    float t = lightDist / light.radius;
-    float fade = smoothstep(1.0f, 0.8f, t);
-    float attenuation = (1.0f / (1.0f + 0.1f * pow(lightDist, 2.0f))) * fade * light.intensity;
-    
-    // **ИСПРАВЛЕНИЕ ДЛЯ ТЕНЕЙ** - используем ТОЧНО ту же логику, что и для точечного света
-    bool inShadow = false;
-    vec3 shadowRayOrigin = hitPoint + normal * bias;
-    
-    for (size_t k = 0; k < objects.size(); ++k) {
-        Object* obj = objects[k];
-        if(obj == closestObj) continue;
-
-        vec3 shadowNormal;
-        float shadowDist = FLT_MAX;
-        
-        // **ВАЖНО**: используем lightDir (направление к источнику), а не lightMainDir
-        if(obj->set(shadowRayOrigin, lightDir, shadowDist, shadowNormal)) {
-            if(shadowDist > 0.001f && shadowDist < lightDist) {
-                inShadow = true;
-                break;
+            if (light.type == LIGHT_SPOT) {
+                // ================= ПРОЖЕКТОР (ИСПРАВЛЕННЫЙ) =================
+                vec3 toLight = light.position - hitPoint;
+                float lightDist = length(toLight);
+                
+                // Проверяем, не слишком ли далеко
+                if (lightDist > light.radius) {
+                    continue;
+                }
+                
+                vec3 lightDir = norm(toLight);
+                
+                // Направление прожектора (должно быть уже нормализовано в конструкторе)
+                vec3 spotDir = norm(light.direction);
+                
+                // Угол между направлением прожектора и направлением к точке
+                // Внимание: toLight направлен ОТ точки К свету, а прожектор светит ОТ света
+                // Поэтому используем -lightDir
+                float cosAngle = dot(-lightDir, spotDir);
+                float cosCutoff = cos(light.angle);
+                
+                // Если точка вне конуса прожектора
+                if (cosAngle < cosCutoff) {
+                    continue;
+                }
+                
+                // Коэффициент затухания по углу (мягкий край)
+                float angleFactor = 1.0f;
+                if (cosAngle < cosCutoff + 0.1f) {
+                    angleFactor = (cosAngle - cosCutoff) / 0.1f;
+                }
+                
+                // Затухание по расстоянию (такое же как у точечного света)
+                float t = lightDist / light.radius;
+                float fade = smoothstep(1.0f, 0.8f, t);
+                float attenuation = (1.0f / (1.0f + 0.1f * pow(lightDist, 2.0f))) * fade * light.intensity;
+                
+                // Учитываем угловой коэффициент
+                attenuation *= angleFactor;
+                
+                // Проверка теней (такая же как для точечного света)
+                bool inShadow = false;
+                vec3 shadowRayOrigin = hitPoint + normal * bias;
+                
+                for (size_t k = 0; k < objects.size(); ++k) {
+                    Object* obj = objects[k];
+                    if(obj == closestObj) continue;
+                    
+                    vec3 shadowNormal;
+                    float shadowDist = FLT_MAX;
+                    if(obj->set(shadowRayOrigin, lightDir, shadowDist, shadowNormal)) {
+                        if(shadowDist > 0.001f && shadowDist < lightDist) {
+                            inShadow = true;
+                            break;
+                        }
+                    }
+                }
+                
+                float lightFactor = max(dot(normal, lightDir), 0.0f) * currentAlbedo;
+                if(inShadow) {
+                    brightness += lightFactor * shadowBrightness * attenuation;
+                } else {
+                    brightness += lightFactor * attenuation;
+                }
             }
-        }
-    }
-
-    // Освещенность - используем основное направление для равномерности
-    float lightFactor = max(dot(normal, lightMainDir), 0.0f) * currentAlbedo;
-    
-    if(inShadow) {
-        brightness += lightFactor * shadowBrightness * attenuation;
-    } else {
-        brightness += lightFactor * attenuation;
-    }
-
-
-
-
-			} else {
-                // Для точечного и прожекторного света - существующая логика
+            else if (light.type == LIGHT_POINT) {
+                // ================= ТОЧЕЧНЫЙ СВЕТ (РАБОЧАЯ ВЕРСИЯ) =================
                 vec3 toLight = light.position - hitPoint;
                 float lightDist = length(toLight);
                 vec3 lightDir = norm(toLight);
                 
-                if (light.type == LIGHT_POINT) {
-                    float t = lightDist / light.radius;
-                    float fade = smoothstep(1.0f, 0.8f, t);
-                    float attenuation = (1.0f / (1.0f + pow(lightDist, 2.0f))) * fade * light.intensity;
-                    
-                    bool inShadow = false;
-                    for (size_t k = 0; k < objects.size(); ++k) {
-                        Object* obj = objects[k];
-                        if(obj == closestObj) continue;
+                float t = lightDist / light.radius;
+                float fade = smoothstep(1.0f, 0.8f, t);
+                float attenuation = (1.0f / (1.0f + 0.1f * pow(lightDist, 2.0f))) * fade * light.intensity;
+                
+                bool inShadow = false;
+                vec3 shadowRayOrigin = hitPoint + normal * bias;
+                
+                for (size_t k = 0; k < objects.size(); ++k) {
+                    Object* obj = objects[k];
+                    if(obj == closestObj) continue;
 
-                        vec3 shadowNormal;
-                        float shadowDist = FLT_MAX;
-                        if(obj->set(hitPoint, lightDir, shadowDist, shadowNormal)) {
-                            if(shadowDist > 0.001f && shadowDist < lightDist) {
-                                inShadow = true;
-                                break;
-                            }
+                    vec3 shadowNormal;
+                    float shadowDist = FLT_MAX;
+                    if(obj->set(shadowRayOrigin, lightDir, shadowDist, shadowNormal)) {
+                        if(shadowDist > 0.001f && shadowDist < lightDist) {
+                            inShadow = true;
+                            break;
                         }
                     }
-
-                    float lightFactor = max(dot(normal, lightDir), 0.0f) * currentAlbedo;
-                    if(inShadow) {
-                        brightness += lightFactor * shadowBrightness * attenuation;
-                    } else {
-                        brightness += lightFactor * attenuation;
-                    }
                 }
-                // Для прожектора - аналогичная логика, но с угловой проверкой
+
+                float lightFactor = max(dot(normal, lightDir), 0.0f) * currentAlbedo;
+                if(inShadow) {
+                    brightness += lightFactor * shadowBrightness * attenuation;
+                } else {
+                    brightness += lightFactor * attenuation;
+                }
             }
         }
 
         brightness = min(brightness, 1.0f);
-        brightness = sqrtf(brightness); // Гамма-коррекция
+        brightness = sqrtf(brightness);
         ro = hitPoint;
-    }
-
-    static bool firstSuccess = true;
-    if (firstSuccess) {
-        Log::write("Object setting initialized successfully", 1);
-        firstSuccess = false;
     }
 }
 
