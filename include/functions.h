@@ -58,18 +58,18 @@ inline float dot(const vec3& a, const vec3& b) {
 }
 
 inline vec3 norm(vec3 v) {
-	float len = length(v);
-	if (len == 0.0f) return vec3(0.0f);
-	return v / len;
+    float len = length(v);
+    if (len == 0.0f) return vec3(0.0f);
+    return v / len;
 }
 
 inline float radians(float degrees) {
-    return degrees * 3.14159265358979323846f / 180.0f;
+    return degrees * M_PI / 180.0f;
 }
 
 inline float smoothstep(float edge0, float edge1, float x) {
-    x = clamp((x - edge0) / (edge1 - edge0), 0.0f, 1.0f);
-    return x * x * (3.0f - 2.0f * x);
+	x = clamp((x - edge0) / (edge1 - edge0), 0.0f, 1.0f);
+	return x * x * (3 - 2 * x);
 }
 
 inline float cross(const vec2& a, const vec2& b) {
