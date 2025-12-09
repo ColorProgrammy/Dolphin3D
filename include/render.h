@@ -11,7 +11,7 @@ class Object;
 enum LightType {
     LIGHT_POINT,
     LIGHT_SPOT,
-	LIGHT_DIRECTIONAL
+    LIGHT_DIRECTIONAL
 };
 
 struct Light {
@@ -20,13 +20,24 @@ struct Light {
     vec3 direction;
     float intensity;
     float radius;
-    float angle;
+    float angle;        // Для прожектора (радианы)
+    float width;        // Для направленного света
+    float range;        // Для направленного света
 
+    // Конструктор для точечного света
     Light(vec3 pos, float intens = 1.0f, float r = 5.0f)
-        : type(LIGHT_POINT), position(pos), intensity(intens), radius(r), angle(0.0f), direction(vec3(0,0,0)) {}
+        : type(LIGHT_POINT), position(pos), intensity(intens), radius(r), 
+          angle(0.0f), width(1.0f), range(10.0f), direction(vec3(0,0,0)) {}
 
+    // Конструктор для прожектора
     Light(vec3 pos, vec3 dir, float intens, float r, float ang)
-        : type(LIGHT_SPOT), position(pos), direction(norm(dir)), intensity(intens), radius(r), angle(ang) {}
+        : type(LIGHT_SPOT), position(pos), direction(norm(dir)), intensity(intens), 
+          radius(r), angle(ang), width(1.0f), range(r) {}
+
+    // Конструктор для направленного света
+    Light(vec3 pos, vec3 dir, float intens, float r, float ang, float w, float rang)
+        : type(LIGHT_DIRECTIONAL), position(pos), direction(norm(dir)), intensity(intens), 
+          radius(r), angle(ang), width(w), range(rang) {}
 };
 
 extern std::vector<Light> lights;
