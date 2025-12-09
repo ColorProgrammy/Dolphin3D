@@ -15,29 +15,23 @@ int Log::errorCount = 0;
 void Log::init(const std::string& folderName, const std::string& logFileName) {
     PWSTR documentsPath = NULL;
     SHGetKnownFolderPath(FOLDERID_Documents, 0, NULL, &documentsPath);
-    
-    // Формируем полный путь к папке и файлу
+
     std::wstring fullPath = std::wstring(documentsPath) + L"\\" + 
                            std::wstring(folderName.begin(), folderName.end());
     
-    // Создаем папку, если она не существует
     CreateDirectoryW(fullPath.c_str(), NULL);
-    
-    // Формируем полный путь к лог-файлу
+
     logPath = fullPath + L"\\" + std::wstring(logFileName.begin(), logFileName.end());
-    
-    // Освобождаем память, выделенную для documentsPath
+
     CoTaskMemFree(documentsPath);
-    
-    // Открываем файл в режиме trunc (очищает содержимое)
+
     std::ofstream logFile(logPath.c_str(), std::ios::out | std::ios::trunc);
     if (!logFile.is_open()) {
         std::wcerr << L"Error opening log file: " << logPath << std::endl;
         return;
     }
-    logFile.close(); // Закрываем файл после очистки
+    logFile.close();
 
-    // Инициализируем счетчики
     successCount = 0;
     errorCount = 0;
 }
