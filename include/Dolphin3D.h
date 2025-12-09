@@ -12,3 +12,5 @@
 #include "../include/gradients.h"
 #include "../include/log.h"
 #include "../include/keyCodes.h"
+#include "../include/mat4.h"
+#include "../include/camera.h"

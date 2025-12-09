@@ -1,13 +1,3 @@
-/*
-File: Vector3.h
-Developer: ColorProgrammy
-
-Description:
-Creating Vector3
-*/
-
-// Please do not touch this code.
-
 #pragma once
 #include "Vector2.h"
 #include <cmath>
@@ -26,9 +16,6 @@ struct vec3
         return std::sqrt(v.x * v.x + v.y * v.y + v.z * v.z);
     }
 
-    inline float length(vec2 const& v) {
-        return std::sqrt(v.x * v.x + v.y * v.y);
-    }
 
     vec3 norm(vec3 v) {
         float len = length(v);
@@ -46,12 +33,20 @@ struct vec3
     vec3(float _x, vec2 const& v) : x(_x), y(v.x), z(v.y) {};
     vec3(float _x, float _y, float _z) : x(_x), y(_y), z(_z) {};
 
-    vec3 operator+(vec3 const& other) const { return vec3(x + other.x, y + other.y, z + other.z); }
-    vec3 operator-(vec3 const& other) const { return vec3(x - other.x, y - other.y, z - other.z); }
-    vec3 operator*(vec3 const& other) const { return vec3(x * other.x, y * other.y, z * other.z); }
+    vec3 operator+(vec3 const& other) const { 
+		return vec3(x + other.x, y + other.y, z + other.z); 
+	}
 
-    vec3 operator/(vec3 const& other) const { 
-        return vec3(x / other.x, y / other.y, z / other.z); 
+    vec3 operator-(vec3 const& other) const { 
+		return vec3(x - other.x, y - other.y, z - other.z); 
+	}
+
+    vec3 operator*(vec3 const& other) const { 
+		return vec3(x * other.x, y * other.y, z * other.z); 
+	}
+
+    vec3 operator/(vec3 const& other) const {
+        return vec3(x / other.x, y / other.y, z / other.z);
     }
 
     vec3 operator/(float scalar) const {
@@ -61,5 +56,20 @@ struct vec3
         return vec3(x / scalar, y / scalar, z / scalar);
     }
 
-    vec3 operator-() const { return vec3(-x, -y, -z); }
+    vec3 operator-() const { 
+		return vec3(-x, -y, -z); 
+	}
+
+    vec3& operator+=(const vec3& other) {
+        x += other.x;
+        y += other.y;
+        z += other.z;
+        return *this;
+    }
+	vec3& operator-=(const vec3& other) {
+        x -= other.x;
+        y -= other.y;
+        z -= other.z;
+        return *this;
+    }
 };
