@@ -131,7 +131,7 @@ int main() {
     // Menu
 	const char* startTxt3 = 
 							":::    ::: ::::::::::  ::::::::            ::::::::   \n"
-							":+:    :+: :+:        :+:    :+:        :+:    :+:\n"
+							":+:    :+: :+:        :+:    :+:         :+:    :+:\n"
 							"+:+    +:+ +:+        +:+    +:+              +:+ \n"
 							"+#+    +:+ :#::+::#   +#+    +:+           +#++:   \n"
 							"+#+    +#+ +#+        +#+    +#+             +#+   \n";
@@ -243,7 +243,13 @@ int main() {
 
 	std::vector<Light> lights;
     //createPointLight(lights, vec3(0, 20, -7), 30.5f, 150.0f);
-	createDirectionalLight(lights, vec3(0, 20, -7), vec3(0, -1, 0.2f), 0.5f, 20.0f, 250.0f);
+	createSpotlight(lights, 
+		vec3(0, 15, -10),      // Позиция: высоко и позади сцены
+		vec3(0, -1.0f, 0.0f),  // Направление: вниз и немного вперед
+		3.0f,                  // Интенсивность
+		50.0f,                 // Радиус действия
+		0.8f                   // Угол раскрытия (~45 градусов в радианах)
+	);
 
     std::vector<Object*> objects;
     objects.push_back(new Plane(planePos, vec3(0, 1, 0), 1.5f, Color::Grey()));
@@ -277,7 +283,7 @@ int main() {
 
 	// Main
     while (true) {
-		target->rotateLocalZ(0.05f);
+		target->rotateLocalZ(0.15f);
         swapBuffers(currentBuffer, displayBuffer, width, height);
 
         DWORD currentTime = GetTickCount();
