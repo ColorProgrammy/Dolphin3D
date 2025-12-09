@@ -1,11 +1,3 @@
-/* 
-File: objects.hpp
-Developer: ColorProgrammy
-
-Description:
-Ray intersections with objects, object adjustments, etc.
-*/
-
 #pragma once
 #include "functions.h"
 #include "Vector2.h"
@@ -14,9 +6,6 @@ Ray intersections with objects, object adjustments, etc.
 #include "mat4.h"
 #include "color.h"
 #include <memory>
-
-/////
-// Intersections of rays
 
 inline vec2 sphere(vec3 ro, vec3 rd, float r) {
 	float b = dot(ro, rd);
@@ -43,6 +32,8 @@ inline vec2 box(vec3 ro, vec3 rd, float baseWidth, float baseHeight, float boxHe
     vec3 yzx = vec3(t1.y, t1.z, t1.x);
     vec3 zxy = vec3(t1.z, t1.x, t1.y);
     outNormal = -sign(rd) * step(yzx, t1) * step(zxy, t1);
+
+    outNormal = norm(outNormal);
 
     if (outNormal.z < 0) {
         vec3 slopeNormal = norm(vec3(-outNormal.x, -outNormal.y, 1));
@@ -134,12 +125,6 @@ inline vec3 cylNormal(const vec3& p, const vec3& a, const vec3& b, float ra) {
     return (pa - ba * h) / ra;
 }
 
-//
-/////
-
-/////
-// Creating objects and configuring them
-
 class Object {
 protected:
     mat4 transform; // Transformation matrix of the object.
@@ -167,16 +152,11 @@ public:
 
     virtual void setPosition(const vec3& position) {
         // Instead of calculating the difference, create a translation matrix directly to the new position.
-        transform = mat4::translate(position) *  getRotationMatrix();
+        transform = mat4::translate(position) *  getRotationMatrix();  // IMPORTANT: Preserve rotation
         pos = position;
     }
 
-    virtual void setColor(const Color& color) {
-        this->color = color;
-    }
-
-    // Extract rotation part of the transform matrix
-    mat4 getRotationMatrix() const {
+	mat4 getRotationMatrix() const {
 		mat4 rotation = transform;
 		rotation.m[0][3] = 0.0f;
 		rotation.m[1][3] = 0.0f;
@@ -184,25 +164,27 @@ public:
 		return rotation;
 	}
 
-    virtual void rotateLocalX(float angle) {
-		mat4 rotation = getRotationMatrix() * mat4::rotateX(angle);
-		transform = mat4::translate(pos) * rotation;
-	}
-
-	virtual void rotateLocalY(float angle) {
-		mat4 rotation = getRotationMatrix() * mat4::rotateY(angle);
-		transform = mat4::translate(pos) * rotation;
-	}
-
-	virtual void rotateLocalZ(float angle) {
-		mat4 rotation = getRotationMatrix() * mat4::rotateZ(angle);
-		transform = mat4::translate(pos) * rotation;
-	}
-
-    virtual void translate(const vec3& t) {
-        transform = mat4::translate(t) * transform;
-        pos += t;
+    virtual void setColor(const Color& color) {
+        this->color = color;
     }
+
+    void rotateLocalX(float angle) {
+        mat4 rotation = mat4::rotateX(angle);
+        // Preserve existing translation and apply new rotation
+        transform = mat4::translate(pos) * rotation * getRotationMatrix();
+    }
+
+    void rotateLocalY(float angle) {
+        mat4 rotation = mat4::rotateY(angle);
+        transform = mat4::translate(pos) * rotation * getRotationMatrix();
+    }
+
+    void rotateLocalZ(float angle) {
+        mat4 rotation = mat4::rotateZ(angle);
+        transform = mat4::translate(pos) * rotation * getRotationMatrix();
+    }
+
+    
 
     vec3 getPosition() const {
         return pos; // Return the object's position
@@ -434,6 +416,3 @@ public:
     vec3 getB() const { return b; }
     float getRadius() const { return radius; }
 };
-
-//
-/////
