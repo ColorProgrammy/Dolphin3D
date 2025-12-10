@@ -1,6 +1,4 @@
-DolphinEngine
---
-### Setup the Dolphin3D CL
+### Setup the Dolphin3D
 
 First you need to download Visual Studio to compile the project.
 
@@ -22,7 +20,7 @@ Use the manual to write it.
 
 Next you need to right-click on the project in Solution Explorer and click `Build`.
 
-The compiled application should appear in the `bin` folder.
+The compiled application should appear in the `bin` folder (if you added output to this folder in the project settings)
 
 ----
 
