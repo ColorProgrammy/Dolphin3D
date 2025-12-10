@@ -33,7 +33,7 @@ inline vec2 box(vec3 ro, vec3 rd, float baseWidth, float baseHeight, float boxHe
     vec3 zxy = vec3(t1.z, t1.x, t1.y);
     outNormal = -sign(rd) * step(yzx, t1) * step(zxy, t1);
 
-    outNormal = norm(outNormal);
+    //outNormal = norm(outNormal);
 
     if (outNormal.z < 0) {
         vec3 slopeNormal = norm(vec3(-outNormal.x, -outNormal.y, 1));
