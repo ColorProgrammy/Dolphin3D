@@ -1,0 +1,60 @@
+#ifndef RENDER_H
+#define RENDER_H
+
+#include <windows.h>
+#include <vector>
+#include "color.h"
+#include "Vector3.h"
+
+class Object;
+
+enum LightType {
+    LIGHT_POINT,
+    LIGHT_SPOT,
+    LIGHT_DIRECTIONAL
+};
+
+struct Light {
+    LightType type;
+    vec3 position;
+    vec3 direction;
+    float intensity;
+    float radius;
+    float angle;        // Для прожектора (радианы)
+    float width;        // Для направленного света
+    float range;        // Для направленного света
+
+    // Конструктор для точечного света
+    Light(vec3 pos, float intens = 1.0f, float r = 5.0f)
+        : type(LIGHT_POINT), position(pos), intensity(intens), radius(r), 
+          angle(0.0f), width(1.0f), range(10.0f), direction(vec3(0,0,0)) {}
+
+    // Конструктор для прожектора
+    Light(vec3 pos, vec3 dir, float intens, float r, float ang)
+        : type(LIGHT_SPOT), position(pos), direction(norm(dir)), intensity(intens), 
+          radius(r), angle(ang), width(1.0f), range(r) {}
+
+    // Конструктор для направленного света
+    Light(vec3 pos, vec3 dir, float intens, float r, float ang, float w, float rang)
+        : type(LIGHT_DIRECTIONAL), position(pos), direction(norm(dir)), intensity(intens), 
+          radius(r), angle(ang), width(w), range(rang) {}
+};
+
+extern std::vector<Light> lights;
+extern CHAR_INFO* currentBuffer;
+extern CHAR_INFO* displayBuffer;
+
+void setBuffer(int width, int height);
+void freeBuffers();
+void freeObjects(std::vector<Object*>& objects);
+bool initRender(int width, int height);
+void render(int width, int height, int fps = 60);
+void setColors(int i, int j, int width, size_t gradientSize, const char* gradient, bool hit, Color currentcolor, float brightness);
+void setObjects(std::vector<Object*>& objects, vec3& ro, vec3& rd, bool& hit, Color& currentcolor, float& brightness, vec3& normal, std::vector<Light>& lights, float shadowBrightness = 0.7f, float shadowDistance = 3.0f);
+vec2 createUV(int i, int j, int width, int height);
+void swapBuffers(CHAR_INFO* currentBuffer, CHAR_INFO* displayBuffer, int width, int height);
+void createPointlight(std::vector<Light>& lights, vec3 position, float intensity = 1.0f, float radius = 3.0f);
+void createSpotlight(std::vector<Light>& lights, vec3 position, vec3 direction, float intensity, float radius, float angle);
+void createDirectionallight(std::vector<Light>& lights, vec3 position, vec3 direction, float intensity = 1.0f, float width = 1.0f, float range = 10.0f);
+
+#endif
