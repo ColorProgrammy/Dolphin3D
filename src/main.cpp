@@ -19,7 +19,6 @@ int main() {
     setWindow(width, height, "Simple Scene");
     system("cls");
 
-    // Инициализация
     bool hit;
     Color currentcolor;
     vec3 normal;
@@ -30,11 +29,9 @@ int main() {
     char gradient[maxGradientSize];
     setGradientSize(gradient, gradientSize, maxGradientSize, gradientName);
 
-    // Создаем только необходимые объекты
     vec3 planePos = vec3(0, 0, -5);
-    vec3 cubePos = vec3(0, 0, -2);  // Позиция синего куба
+    vec3 cubePos = vec3(0, 0, -2);
 
-    // Создаем источник света - используем оригинальную функцию из работающего кода
     std::vector<Light> lights;
     createSpotlight(lights, 
         vec3(7, 15, -10),
@@ -44,12 +41,10 @@ int main() {
         3.14f/2
     );
 
-    // Создаем только 3 объекта: плоскость и синий куб
     std::vector<Object*> objects;
     objects.push_back(new Plane(planePos, vec3(0, 1, 0), 1.5f, Color::Grey()));
     objects.push_back(new Box(cubePos, vec3(2.0f, 2.0f, 2.0f), 5.0f, Color::Blue()));
 
-    // Основной цикл рендеринга
     while (true) {
 		t += 1;
         swapBuffers(currentBuffer, displayBuffer, width, height);
@@ -75,8 +70,6 @@ int main() {
 
         render(width, height, 30);
     }
-
-    // Очистка
     freeBuffers();
     freeObjects(objects);
     return 0;
