@@ -1,3 +1,11 @@
+/*
+File: functions.h
+Developer: ColorProgrammy
+
+Description:
+Required functions for the framework
+*/
+
 #pragma once
 #include "Vector2.h"
 #include "Vector3.h"
@@ -6,7 +14,7 @@
 #include <iostream>
 
 #ifndef M_PI
-#define M_PI 3.1415926535897932384626433832795028841971693993751058209749445923078164062862089986280348253421170679
+#define M_PI 3.1415926535897932384626433832795028841971693993751058209749445923078164062862089986280348253421170679 // nice
 #endif
 
 #pragma warning(push)
