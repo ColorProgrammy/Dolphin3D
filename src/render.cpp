@@ -1,3 +1,11 @@
+/*
+File: render.cpp
+Developer: ColorProgrammy
+
+Description:
+For rendering scenes, the necessary
+*/
+
 #include "../include/globals.h"
 #include "../include/Vector2.h"
 #include "../include/Vector3.h"
@@ -98,6 +106,7 @@ bool initRender(int width, int height) {
         return false;
     }
 
+	// Set
     HWND consoleWindow = GetConsoleWindow();
     MoveWindow(consoleWindow, 0, 0, width * 8, height * 16, TRUE);
     LONG style = GetWindowLong(consoleWindow, GWL_STYLE);
@@ -189,7 +198,7 @@ void setColors(int i, int j, int width, size_t gradientSize, const char* gradien
     }
 }
 
-void createPointLight(std::vector<Light>& lights, vec3 position, float intensity, float radius) {
+void createPointlight(std::vector<Light>& lights, vec3 position, float intensity, float radius) {
     lights.push_back(Light(position, intensity, radius));
 }
 
@@ -197,12 +206,10 @@ void createSpotlight(std::vector<Light>& lights, vec3 position, vec3 direction, 
     lights.push_back(Light(position, direction, intensity, radius, angle));
 }
 
-void createDirectionalLight(std::vector<Light>& lights, vec3 position, vec3 direction, 
-                           float intensity, float angle, float range) {
-    Light light(position, norm(direction), intensity, range, angle);
-    light.type = LIGHT_DIRECTIONAL;
-    lights.push_back(light);
+void createDirectionallight(std::vector<Light>& lights, vec3 position, vec3 direction, float intensity, float radius, float angle) {
+    lights.push_back(Light(position, direction, intensity, radius, angle));
 }
+
 
 void setObjects(std::vector<Object*>& objects, vec3& ro, vec3& rd, bool& hit, 
                Color& currentcolor, float& brightness, vec3& normal, 
@@ -215,7 +222,6 @@ void setObjects(std::vector<Object*>& objects, vec3& ro, vec3& rd, bool& hit,
     Object* closestObj = NULL;
     float currentAlbedo = 1.0f;
 
-    // Найти ближайший объект
     for (size_t k = 0; k < objects.size(); ++k) {
         Object* obj = objects[k];
         float currentDist = FLT_MAX;
@@ -235,53 +241,42 @@ void setObjects(std::vector<Object*>& objects, vec3& ro, vec3& rd, bool& hit,
     if (hit) {
         float bias = max(0.001f, minDist * 0.001f);
         vec3 hitPoint = ro + rd * (minDist - bias);
-        brightness = 0.1f; // Базовое окружающее освещение
+        brightness = 0.1f;
 
-        // Обработка ВСЕХ источников света
         for (size_t l = 0; l < lights.size(); ++l) {
             Light& light = lights[l];
             
+			// SpotLight
             if (light.type == LIGHT_SPOT) {
-                // ================= ПРОЖЕКТОР (ИСПРАВЛЕННЫЙ) =================
                 vec3 toLight = light.position - hitPoint;
                 float lightDist = length(toLight);
-                
-                // Проверяем, не слишком ли далеко
+
                 if (lightDist > light.radius) {
                     continue;
                 }
                 
                 vec3 lightDir = norm(toLight);
-                
-                // Направление прожектора (должно быть уже нормализовано в конструкторе)
+
                 vec3 spotDir = norm(light.direction);
-                
-                // Угол между направлением прожектора и направлением к точке
-                // Внимание: toLight направлен ОТ точки К свету, а прожектор светит ОТ света
-                // Поэтому используем -lightDir
-                float cosAngle = dot(-lightDir, spotDir);
+
+                float cosAngle = dot(lightDir, spotDir);
                 float cosCutoff = cos(light.angle);
-                
-                // Если точка вне конуса прожектора
+
                 if (cosAngle < cosCutoff) {
                     continue;
                 }
-                
-                // Коэффициент затухания по углу (мягкий край)
+
                 float angleFactor = 1.0f;
                 if (cosAngle < cosCutoff + 0.1f) {
                     angleFactor = (cosAngle - cosCutoff) / 0.1f;
                 }
-                
-                // Затухание по расстоянию (такое же как у точечного света)
+
                 float t = lightDist / light.radius;
                 float fade = smoothstep(1.0f, 0.8f, t);
                 float attenuation = (1.0f / (1.0f + 0.1f * pow(lightDist, 2.0f))) * fade * light.intensity;
-                
-                // Учитываем угловой коэффициент
+
                 attenuation *= angleFactor;
-                
-                // Проверка теней (такая же как для точечного света)
+
                 bool inShadow = false;
                 vec3 shadowRayOrigin = hitPoint + normal * bias;
                 
@@ -306,8 +301,9 @@ void setObjects(std::vector<Object*>& objects, vec3& ro, vec3& rd, bool& hit,
                     brightness += lightFactor * attenuation;
                 }
             }
+
+			// PointLight
             else if (light.type == LIGHT_POINT) {
-                // ================= ТОЧЕЧНЫЙ СВЕТ (РАБОЧАЯ ВЕРСИЯ) =================
                 vec3 toLight = light.position - hitPoint;
                 float lightDist = length(toLight);
                 vec3 lightDir = norm(toLight);
