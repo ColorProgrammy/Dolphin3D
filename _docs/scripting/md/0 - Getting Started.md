@@ -1,13 +1,13 @@
 # Getting Started
 
-### Welcome to Dolphin3D CL
+### Welcome to Dolphin3D
 
 Here we will teach you all about scripting.
 But first, it is recommended to read this.
 
 ---
 
-##### First you need to configure Dolphin3D CL (see _setup.md).
+##### First you need to configure Dolphin3D (see _setup.md).
 ##### Next, you are recommended to know the basics of C++.
 ##### And follow our instructions.
 
