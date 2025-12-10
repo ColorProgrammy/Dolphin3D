@@ -1,4 +1,4 @@
-this is for you, as many people don't have powerful PCs, but want something unusual :)
+this is for you, as many people don't have powerful PCs, but want something unusual :) (like me)
 
 There's actually a lot you can do with this engine.
 
