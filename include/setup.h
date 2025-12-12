@@ -1,3 +1,11 @@
+/*
+File: setup.h
+Developer: ColorProgrammy
+
+Description:
+Several functions for the framework setup
+*/
+
 #pragma once
 #include <iostream>
 #include <fstream>
@@ -61,7 +69,7 @@ inline Config readConfig(const std::string& filename) {
                     std::istringstream(value) >> cfg.height;
                 }
             }
-			if (section == "Logging") {  // НОВАЯ СЕКЦИЯ
+			if (section == "Logging") {
 				if (key == "EnableLogging") {
 					cfg.enableLogging = (value == "true" || value == "1");
 			}
@@ -114,7 +122,7 @@ inline Config readConfigFromFullPath(const std::string& fullPath) {
                     std::istringstream(value) >> cfg.height;
                 }
             }
-			if (section == "Logging") {  // НОВАЯ СЕКЦИЯ
+			if (section == "Logging") {
 				if (key == "EnableLogging") {
 					cfg.enableLogging = (value == "true" || value == "1");
 			}
@@ -161,16 +169,15 @@ inline void copyConfigFile(const std::string& folderName, const std::string& con
 
 inline void createLogFile(const std::string& folderName, const Config& cfg) {
     if (!cfg.enableLogging) {
-        return; // Если логирование отключено, ничего не делаем
+        return; // If logging is disabled, do nothing
     }
 
     char documentsPath[MAX_PATH];
     SHGetFolderPathA(NULL, CSIDL_PERSONAL, NULL, 0, documentsPath);
     
-    // Формируем полный путь к лог-файлу
+    // Forming the full path to the log file
     std::string fullPath = std::string(documentsPath) + "\\" + folderName + "\\" + cfg.logPath;
-    
-    // Создаем директорию для логов, если она не существует
+
     std::string dirPath = std::string(documentsPath) + "\\" + folderName;
     size_t pos = cfg.logPath.find_last_of("\\/");
     if (pos != std::string::npos) {
@@ -185,13 +192,11 @@ inline void createLogFile(const std::string& folderName, const Config& cfg) {
         }
     }
 
-    // Инициализируем лог-систему (Log::init должен открыть файл для записи)
     Log::init(folderName, cfg.logPath);
 
 	std::stringstream ss;
 	ss << "Window size: " << cfg.width << " x " << cfg.height;
 
-    // Записываем начальные данные в лог через Log::write (если такая функция есть)
     Log::write("Title: " + cfg.title);
     Log::write(ss.str());
     Log::write("---");
@@ -199,10 +204,8 @@ inline void createLogFile(const std::string& folderName, const Config& cfg) {
     Log::write("---");
     Log::write("Application opened.");
 
-    // Устанавливаем обработчик завершения программы
     SetConsoleCtrlHandler(ConsoleHandler, TRUE);
 
-    // Сообщаем об успешной инициализации логов
     std::cout << "Log file created successfully: " << fullPath << std::endl;
 }
 

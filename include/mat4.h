@@ -1,4 +1,10 @@
-// mat4.h
+/*
+File: mat4.h
+Developer: ColorProgrammy
+
+Description:
+A matrix that uses four vectors and serves as an important library for rotation (rotate.h and objects.hpp)
+*/
 #pragma once
 #include "Vector3.h"
 #include "Vector4.h"

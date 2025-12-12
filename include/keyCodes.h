@@ -1,3 +1,11 @@
+/*
+File: keyCodes.h
+Developer: ColorProgrammy
+
+Description:
+Stores translated keycodes from numbers to variables (for ease of use)
+*/
+
 #ifndef KEYCODES_H
 #define KEYCODES_H
 

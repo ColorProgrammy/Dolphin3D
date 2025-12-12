@@ -1,3 +1,11 @@
+/*
+File: color.h
+Developer: ColorProgrammy
+
+Description:
+The color library
+*/
+
 #ifndef COLOR_H
 #define COLOR_H
 
@@ -12,33 +20,35 @@ public:
     Color(int red, int green, int blue) : r(red), g(green), b(blue) {}
 
     void setConsoleColor(HANDLE hConsole) {
-        int r_index = (r * 5) / 255;
-        int g_index = (g * 5) / 255;
-        int b_index = (b * 5) / 255;
-
         int color = 0;
-        if (r_index > 0) color |= FOREGROUND_RED;
-        if (g_index > 0) color |= FOREGROUND_GREEN;
-        if (b_index > 0) color |= FOREGROUND_BLUE;
+        if (r > 128) color |= FOREGROUND_RED;
+        if (g > 128) color |= FOREGROUND_GREEN;
+        if (b > 128) color |= FOREGROUND_BLUE;
+        if (r > 128 && g > 128) color |= FOREGROUND_RED | FOREGROUND_GREEN;
+        if (r > 128 && b > 128) color |= FOREGROUND_RED | FOREGROUND_BLUE;
+        if (g > 128 && b > 128) color |= FOREGROUND_GREEN | FOREGROUND_BLUE;
+        if (r > 128 && g > 128 && b > 128) color |= FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE;
 
-        SetConsoleTextAttribute(hConsole, color ? color : 7); 
+        SetConsoleTextAttribute(hConsole, color ? color : 7);
     }
 
     void setConsoleBackgroundColor(HANDLE hConsole) {
-        int r_index = (r * 5) / 255;
-        int g_index = (g * 5) / 255;
-        int b_index = (b * 5) / 255;
-
         int color = 0;
-        if (r_index > 0) color |= BACKGROUND_RED;
-        if (g_index > 0) color |= BACKGROUND_GREEN;
-        if (b_index > 0) color |= BACKGROUND_BLUE;
+        if (r > 128) color |= BACKGROUND_RED;
+        if (g > 128) color |= BACKGROUND_GREEN;
+        if (b > 128) color |= BACKGROUND_BLUE;
+        if (r > 128 && g > 128) color |= BACKGROUND_RED | BACKGROUND_GREEN;
+        if (r > 128 && b > 128) color |= BACKGROUND_RED | BACKGROUND_BLUE;
+        if (g > 128 && b > 128) color |= BACKGROUND_GREEN | BACKGROUND_BLUE;
+        if (r > 128 && g > 128 && b > 128) color |= BACKGROUND_RED | BACKGROUND_GREEN | BACKGROUND_BLUE;
 
         SetConsoleTextAttribute(hConsole, color ? color : 0);
     }
+
     int getR() const { return r; }
     int getG() const { return g; }
     int getB() const { return b; }
+
 
     static Color White() { return Color(255, 255, 255); }
     static Color Black() { return Color(0, 0, 0); }

@@ -1,3 +1,13 @@
+/*
+File: Vector4.h
+Developer: ColorProgrammy
+
+Description:
+Creating Vector4
+*/
+
+// Please do not touch this code.
+
 #pragma once
 #include "Vector3.h"
 #include <cmath>

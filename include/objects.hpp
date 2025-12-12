@@ -1,3 +1,12 @@
+/*
+File: objects.hpp
+Developer: ColorProgrammy (I used the code for objects from Inigo Quilez)
+https://iquilezles.org/articles/
+
+Description:
+A header file that contains functions for different objects to display them during rendering.
+*/
+
 #pragma once
 #include "functions.h"
 #include "Vector2.h"

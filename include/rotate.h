@@ -1,7 +1,19 @@
+/*
+File: rotate.h
+Developer: ColorProgrammy
+
+Description:
+Header file for rotating objects around axes
+(not including rotation around their own axis, which is written in mat4.h)
+*/
+
 #pragma once
 
 #include <cmath>
 #include "functions.h"
+#include "mat4.h"
+
+mat4 transform;
 
 inline vec3 rotateAroundCenterX(vec3 a, double angle)
 {
