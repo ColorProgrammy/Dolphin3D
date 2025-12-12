@@ -1,5 +1,3 @@
-// Ufo Mayhem: Welcome to Space  
-
 #include <iostream>
 #include <cstring>
 #include <cmath>
@@ -49,7 +47,6 @@ int main() {
 		t += 1;
         swapBuffers(currentBuffer, displayBuffer, width, height);
 
-        // Рендеринг
         for (int j = 0; j < height; ++j) {
             for (int i = 0; i < width; ++i) {
                 float brightness = 0.6f;

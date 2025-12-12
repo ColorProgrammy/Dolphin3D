@@ -1,5 +1,12 @@
-#define _CRT_SECURE_NO_WARNINGS
+/*
+File: log.cpp
+Developer: ColorProgrammy
 
+Description:
+Creating logs
+*/
+
+#define _CRT_SECURE_NO_WARNINGS
 
 #include "../include/log.h"
 #include <time.h>

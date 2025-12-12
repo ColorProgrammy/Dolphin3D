@@ -1,3 +1,11 @@
+/*
+File: globals.cpp
+Developer: ColorProgrammy
+
+Description:
+A source file for declaring a variable
+*/
+
 #include "../include/globals.h"
 #include <Shlobj.h>
 
