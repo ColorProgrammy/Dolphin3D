@@ -19,5 +19,5 @@ And read the `license`.
 
 Good luck with the `development`.
 
-#### Copyright © 2024-2025 ColorProgrammy
+#### Copyright © 2024-2026 ColorProgrammy
 
