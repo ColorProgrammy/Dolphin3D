@@ -7,15 +7,15 @@
 
 #### Our engine is unique, easy to write code and has a wide range of functions.
 
-Dolphin3D is an open source framework for console 3D rendering. It's easy to use. There are templates to help you create renderings. The scripting itself is done in C and C++ languages, but we've kept it as simple as possible so you can easily write code.
+***"Dolphin3D"*** is an open source framework for console 3D rendering. It's easy to use. There are templates to help you create renderings. The scripting itself is done in C and C++ languages, but we've kept it as simple as possible so you can easily write code.
 
-Unlike other engines, this one is really easy to use, especially if you use the guides (which are in the `_docs` folder)
+Unlike other engines, this is an `experimental` engine that doesn't look like a regular one.
 
-This graphics engine is suitable for `beginners` :D.
+This graphics engine is suitable for `beginners` :D 
+This one is really easy to use, especially if you use the guides (which are in the `_docs` folder)
 
-See `_docs` for guidance and help.
-
-And read the `license`.
+Also see `_docs` for other guidance and help.
+And read the `license` too.
 
 --------
 
