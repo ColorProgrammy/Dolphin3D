@@ -2,24 +2,19 @@
 
 # Dolphin3D
 
-### A graphic engine
-`Version: v1.0 (in development right now)`
+**A graphics engine for console 3D rendering**  
+*Version: v1.0 (currently in development)*
 
-#### Our engine is unique, easy to write code and has a wide range of functions.
+Dolphin3D is an open-source framework designed to bring accessible 3D rendering to console applications. Built with simplicity in mind, it provides templates and straightforward APIs to help you create visualizations efficiently. While the core is written in C and C++, the engine is structured to be approachable even for those new to graphics programming.
 
-***"Dolphin3D"*** is an open source framework for console 3D rendering. It's easy to use. There are templates to help you create renderings. The scripting itself is done in C and C++ languages, but we've kept it as simple as possible so you can easily write code.
+What sets Dolphin3D apart is its **experimental nature**—it challenges conventional engine design to offer a unique, streamlined experience. This makes it especially suitable for **beginners** looking to explore 3D rendering concepts in a manageable environment.
 
-Unlike other engines, this is an `experimental` engine that doesn't look like a regular one.
+### Getting Started
+- Guides and documentation are available in the `_docs` folder.
+- Please review the `license` file for terms of use.
 
-This graphics engine is suitable for `beginners` :D 
-This one is really easy to use, especially if you use the guides (which are in the `_docs` folder)
+---
 
-Also see `_docs` for other guidance and help.
-And read the `license` too.
+We wish you success in your projects with Dolphin3D.
 
---------
-
-Good luck with the `development`.
-
-#### Copyright © 2024-2026 ColorProgrammy
-
+#### Copyright © 2024–2026 ColorProgrammy
