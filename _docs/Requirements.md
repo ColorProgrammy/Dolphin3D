@@ -1,35 +1,78 @@
-# System requirements
+# System Requirements
 
-## Minimal
-### OS
-**Windows 95 (to play games) or Windows Vista (to create games)**
+## Minimum Requirements
+
+### Operating System
+- **For running games:** Windows 95 (with proper configuration)
+- **For development:** Windows XP with Service Pack 3
+
+### Storage
+- **50 MB** of free disk space
+
+### Processor
+- **Intel Pentium 4** or equivalent (1.5 GHz minimum)
+- **Single-core CPU with SSE2 support**
+
 ### Memory
-Free memory space **10 MB**
-### CPU
-**potato 1**
+- **256 MB RAM** (512 MB recommended for development)
 
-## Recommended
-### OS
-**Windows Vista (Service Pack 2)** and above
+---
+
+## Recommended Requirements
+
+### Operating System
+- Windows 7 or newer
+- Windows Vista (Service Pack 2) with platform update
+
+### Storage
+- **200 MB** of free disk space
+
+### Processor
+- **Intel Core i7 3rd generation** or equivalent
+- **Multi-core CPU recommended** (2+ cores)
+- Engine performance scales with CPU power as all rendering is processor-based
+
 ### Memory
-Free memory space **100 MB** and above
-### CPU
-**potato 2**
+- **2 GB RAM** or more
+- Additional memory improves complex scene handling
 
-# C/C++ version
-## Minimal
-**C**: C99
+---
 
-**C++**: C++98
+# Technical Notes
+
+## CPU-Exclusive Rendering
+Dolphin3D performs all graphics calculations on the CPU, without GPU acceleration. This means:
+- Performance directly correlates with processor speed and core count
+- Integrated or discrete graphics cards do not affect rendering speed
+- Older systems require capable CPUs despite minimal OS requirements
+
+## Windows 95 Compatibility
+While theoretically compatible with Windows 95, practical use requires:
+- CPU with adequate single-thread performance (Pentium 4 or better)
+- Proper application manifest configuration
+- Potential adjustments for legacy API support
+
+---
+
+# Language Standards
+
+## Minimum Supported
+- **C**: C99 standard
+- **C++**: C++98 standard
 
 ## Recommended
-**C**: C99 or above
+- **C**: C99 or newer
+- **C++**: C++11 or newer (for better template support)
 
-**C++**: C++03 or above
+---
 
-# Software
-## Recommended
-**Visual Studio C++ 2008** and above
+# Development Software
 
-> If you are using a newer version of Visual Studio, use migration.
-> > WARNING: When migrating to a new version of Visual Studio, there is a chance that there will be negative consequences (such as artifacts, problems with light, etc.).
+## Recommended IDE
+- **Visual Studio C++ 2008** or later
+
+> **Migration Notice:**  
+> Projects created in Visual Studio 2008 can be migrated to newer versions.
+>
+> ⚠️ **Performance Consideration:**  
+> The engine's CPU-bound nature means adequate processor power is essential. Even simple scenes may struggle on legacy single-core systems despite meeting minimum OS requirements.
