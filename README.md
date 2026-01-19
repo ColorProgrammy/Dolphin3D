@@ -1,3 +1,5 @@
+<img src="https://m.vk.com/photo866780774_456239393?list=wall866780774_24" alt="Thumbnail">
+
 # Dolphin3D
 
 ### A graphic engine
