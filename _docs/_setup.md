@@ -1,44 +1,46 @@
-### Setup the Dolphin3D
+# Setting Up Dolphin3D
 
-First you need to download Visual Studio to compile the project.
+### Prerequisites
 
-I recommend downloading `Visual Studio C++ 2008`, as all the code was written in it.
+To compile the project, you will need **Visual Studio**.  
+It is recommended to use **Visual Studio C++ 2008**, as the engine code was originally developed and tested in this environment.
 
-> For `Visual Studio 2010` and above, use migration, but be aware that there may be consequences.
+> **Note for newer versions:**  
+> If you are using Visual Studio 2010 or later, you may need to migrate the project. Please be aware that compatibility issues could arise during this process.
 
------
+---
 
-Add files to the project.
+### Project Configuration
 
-Include the main `Dolphin3D` library in this path: `../include/Dolphin3D.h`.
+1. **Add files to your project** in Visual Studio.
+2. Include the main Dolphin3D library by adding the following path to your project settings:  
+   `../include/Dolphin3D.h`
+3. Write your application code in `main.cpp`. Refer to the provided documentation and examples for guidance.
 
-Then you will need to write the script itself in `main.cpp`.
+---
 
-Use the manual to write it.
+### Building the Project
 
------
+1. In **Solution Explorer**, right-click on your project.
+2. Select **Build** from the context menu.
+3. Once compiled, your application will be generated in the `bin` folder — provided you have configured the output path accordingly in the project settings.
 
-Next you need to right-click on the project in Solution Explorer and click `Build`.
+---
 
-The compiled application should appear in the `bin` folder (if you added output to this folder in the project settings)
+### Project Structure
 
-----
+| Folder     | Purpose                                                                 |
+|------------|-------------------------------------------------------------------------|
+| `src`      | Contains source code scripts.                                           |
+| `include`  | Houses library files required for the engine to function correctly.     |
+| `_docs`    | Documentation and helpful guides for using the engine.                  |
+| `examples` | Sample projects for reference, testing, and learning.                   |
+| `bin`      | Output directory for compiled executables.                              |
+| `tools`    | Additional utilities and helper programs.                               |
 
-### Folders
+---
 
-The `src` folder includes scripts.
+### Next Steps
+You are now ready to start developing with Dolphin3D. Explore the examples and documentation to familiarize yourself with the engine’s workflow.
 
-The `include` folder is responsible for libraries for the correct operation of the application or game.
-
-The `_docs` folder contains text files for help and assistance in the graphics engine.
-
-The `examples` folder contains test projects. They are mainly needed for help, references, and for testing itself.
-
-The `bin` file contains the compiled project itself.
-
-The `tools` folder contains useful utilities.
-
-----
-
-### That's all!
-### Good luck with your development!
+**Good luck with your development!**
