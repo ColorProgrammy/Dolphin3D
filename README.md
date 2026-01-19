@@ -1,4 +1,4 @@
-<img src="https://m.vk.com/photo866780774_456239393?list=wall866780774_24" alt="Thumbnail">
+<img src="https://sun9-29.userapi.com/s/v1/ig2/OGOKDq5ZoJTVUMa5o2PKJqY90iX1gwgm9B3gD4lTWqGC3UCbjsTObBHkCf00PMefbRwMEGvQtvOEU5MKjOsF6Juq.jpg?quality=95&as=32x24,48x36,72x54,108x81,160x120,240x180,360x270,480x360,540x405,640x480,720x540,1080x810,1280x960,1440x1080,2048x1536&from=bu&u=3u4vKOCUFr__R7tnCJu87SD4DjvYNGqNVghDQeonOVw&cs=640x0" alt="Thumbnail">
 
 # Dolphin3D
 
