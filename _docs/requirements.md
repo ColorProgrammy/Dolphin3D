@@ -4,7 +4,7 @@
 
 ### Operating System
 - **For running games:** Windows 95 (with proper configuration)
-- **For development:** Windows XP with Service Pack 3
+- **For development:** Windows Vista with Service Pack 2
 
 ### Storage
 - **50 MB** of free disk space
@@ -22,7 +22,6 @@
 
 ### Operating System
 - Windows 7 or newer
-- Windows Vista (Service Pack 2) with platform update
 
 ### Storage
 - **200 MB** of free disk space
@@ -62,17 +61,18 @@ While theoretically compatible with Windows 95, practical use requires:
 
 ## Recommended
 - **C**: C99 or newer
-- **C++**: C++11 or newer (for better template support)
+- **C++**: C++03 standard
 
 ---
 
 # Development Software
 
 ## Recommended IDE
-- **Visual Studio C++ 2008** or later
+- **Visual Studio C++ 2008** (or maybe later)
 
 > **Migration Notice:**  
 > Projects created in Visual Studio 2008 can be migrated to newer versions.
+> Also, the use of other IDE does not guarantee the operation of the engine.
 >
 > ⚠️ **Performance Consideration:**  
 > The engine's CPU-bound nature means adequate processor power is essential. Even simple scenes may struggle on legacy single-core systems despite meeting minimum OS requirements.
