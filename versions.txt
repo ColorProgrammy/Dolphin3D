@@ -1,0 +1,9 @@
+latest=1.0
+version_1.0_status=latest
+version_1.0_message=Stable release
+version_0.9_status=outdated
+version_0.9_message=Beta version
+version_0.8_status=outdated
+version_0.8_message=Alpha version
+version_1.1_status=supported
+version_1.1_message=Development version
