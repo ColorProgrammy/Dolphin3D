@@ -12,7 +12,7 @@ Set fso = CreateObject("Scripting.FileSystemObject")
 Set shell = CreateObject("WScript.Shell")
 currentDir = fso.GetParentFolderName(WScript.ScriptFullName)
 cacheDir = currentDir & "\cache"
-cacheFile = cacheDir & "\versions.txt"
+cacheFile = cacheDir & "\versions.data"
 
 ' Ensure cache directory exists
 Sub EnsureCacheDir()
@@ -108,7 +108,7 @@ Function DownloadFromInternet()
     On Error Resume Next
     Dim http, url, data, startTime, timeout
     
-    url = "https://raw.githubusercontent.com/ColorProgrammy/Dolphin3D/refs/heads/main/Tools/compatibility/cache/versions.txt"
+    url = "https://raw.githubusercontent.com/ColorProgrammy/Dolphin3D/refs/heads/main/Tools/compatibility/cache/versions.data"
     timeout = 10000 ' 10 seconds
     
     Set http = CreateObject("MSXML2.XMLHTTP.6.0")
@@ -492,4 +492,5 @@ If WScript.Arguments.Count > 0 Then
     End If
 Else
     ShowMainMenu
+
 End If
