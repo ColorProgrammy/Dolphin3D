@@ -426,12 +426,6 @@ Sub ShowAbout()
     aboutText = aboutText & "1 - USABLE: Works but not latest" & vbCrLf
     aboutText = aboutText & "2 - LATEST: Up to date" & vbCrLf
     aboutText = aboutText & "3 - BETA/TEST: Development version" & vbCrLf & vbCrLf
-    aboutText = aboutText & "Features:" & vbCrLf
-    aboutText = aboutText & "- Quick engine version check" & vbCrLf
-    aboutText = aboutText & "- Custom version verification" & vbCrLf
-    aboutText = aboutText & "- Offline cache support" & vbCrLf
-    aboutText = aboutText & "- Version suffix detection" & vbCrLf
-    aboutText = aboutText & "- Accurate version comparison"
     
     MsgBox aboutText, vbInformation, "About"
 End Sub
