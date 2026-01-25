@@ -108,7 +108,7 @@ Function DownloadFromInternet()
     On Error Resume Next
     Dim http, url, data, startTime, timeout
     
-    url = "https://raw.githubusercontent.com/ColorProgrammy/Dolphin3D/main/versions.txt"
+    url = "https://raw.githubusercontent.com/ColorProgrammy/Dolphin3D/refs/heads/main/Tools/compatibility/cache/versions.txt"
     timeout = 10000 ' 10 seconds
     
     Set http = CreateObject("MSXML2.XMLHTTP.6.0")
