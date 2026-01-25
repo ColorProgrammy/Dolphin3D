@@ -68,7 +68,8 @@ While theoretically compatible with Windows 95, practical use requires:
 # Development Software
 
 ## Recommended IDE
-- **Visual Studio C++ 2008** (or maybe later)
+- **Visual Studio C++ 2008** (or higher)
+- **CMake 3.0+**
 
 > **Migration Notice:**  
 > Projects created in Visual Studio 2008 can be migrated to newer versions.
