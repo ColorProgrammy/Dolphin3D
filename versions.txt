@@ -1,5 +1,0 @@
-latest=1.0
-version_1.0_status=2
-version_1.0_message=Stable release
-version_0.9_status=1
-version_0.9_message=Beta version
