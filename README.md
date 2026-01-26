@@ -15,6 +15,11 @@ What sets Dolphin3D apart is its **experimental nature**—it challenges convent
 
 ---
 
+### Contributors:
+- **yupi (Ronghul)** - Lead Developer
+- **Bu1ka123** - Helper
+
+
 We wish you success in your projects with Dolphin3D.
 
 #### Copyright © 2024–2026 ColorProgrammy
