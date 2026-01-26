@@ -128,4 +128,5 @@ Write-Host ""
 Write-Host "Build completed at $(Get-Date -Format 'HH:mm:ss')" -ForegroundColor Green
 Write-Host "Log file: $logFile" -ForegroundColor Green
 Write-Host ""
+
 pause
