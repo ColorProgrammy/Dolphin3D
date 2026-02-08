@@ -142,7 +142,7 @@ inline void copyConfigFile(const std::string& folderName, const std::string& con
     SHGetFolderPathA(NULL, CSIDL_PERSONAL, NULL, 0, documentsPath);
     std::string newFolderPath = std::string(documentsPath) + "\\" + folderName;
 
-    CreateDirectory(newFolderPath.c_str(), NULL);
+    CreateDirectoryA(newFolderPath.c_str(), NULL);
 
     std::string configSource = configFileName;
     std::string configDest = newFolderPath + "\\" + configFileName;

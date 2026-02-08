@@ -6,26 +6,30 @@ Description:
 Library for playing audio
 */
 
-#define _CRT_SECURE_NO_WARNINGS
+#ifndef AUDIO_H
+#define AUDIO_H
+
 #include <windows.h>
 #pragma comment(lib, "winmm.lib")
 
 inline void playSoundAsync(const char* soundFile) {
     char currentWorkingDirectory[MAX_PATH];
-    GetCurrentDirectory(MAX_PATH, currentWorkingDirectory);
+    GetCurrentDirectoryA(MAX_PATH, currentWorkingDirectory);
     char fullSoundPath[MAX_PATH];
-    strcpy_s(fullSoundPath, MAX_PATH, currentWorkingDirectory);
-    strcat_s(fullSoundPath, MAX_PATH, "\\");
-    strcat_s(fullSoundPath, MAX_PATH, soundFile);
-    PlaySound(TEXT(fullSoundPath), NULL, SND_ASYNC | SND_FILENAME);
+    strcpy(fullSoundPath, currentWorkingDirectory);
+    strcat(fullSoundPath, "\\");
+    strcat(fullSoundPath, soundFile);
+    PlaySoundA(fullSoundPath, NULL, SND_ASYNC | SND_FILENAME);
 }
 
 inline void playSoundSync(const char* soundFile) {
     char currentWorkingDirectory[MAX_PATH];
-    GetCurrentDirectory(MAX_PATH, currentWorkingDirectory);
+    GetCurrentDirectoryA(MAX_PATH, currentWorkingDirectory);
     char fullSoundPath[MAX_PATH];
-    strcpy_s(fullSoundPath, MAX_PATH, currentWorkingDirectory);
-    strcat_s(fullSoundPath, MAX_PATH, "\\");
-    strcat_s(fullSoundPath, MAX_PATH, soundFile);
-    PlaySound(TEXT(fullSoundPath), NULL, SND_SYNC | SND_FILENAME);
+    strcpy(fullSoundPath, currentWorkingDirectory);
+    strcat(fullSoundPath, "\\");
+    strcat(fullSoundPath, soundFile);
+    PlaySoundA(fullSoundPath, NULL, SND_SYNC | SND_FILENAME);
 }
+
+#endif // AUDIO_H
