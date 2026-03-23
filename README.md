@@ -1,8 +1,8 @@
 <img src="https://sun9-29.userapi.com/s/v1/ig2/OGOKDq5ZoJTVUMa5o2PKJqY90iX1gwgm9B3gD4lTWqGC3UCbjsTObBHkCf00PMefbRwMEGvQtvOEU5MKjOsF6Juq.jpg?quality=95&as=32x24,48x36,72x54,108x81,160x120,240x180,360x270,480x360,540x405,640x480,720x540,1080x810,1280x960,1440x1080,2048x1536&from=bu&u=3u4vKOCUFr__R7tnCJu87SD4DjvYNGqNVghDQeonOVw&cs=640x0" alt="Thumbnail">
 
-# Dolphin3D
+# Dolphin3D Extra Pack
 
-**A graphics engine for console 3D rendering**  
+**A graphics engine for console and window 3D rendering**  
 *Version: v1.0 (currently in development)*
 
 Dolphin3D is an open-source framework designed to bring accessible 3D rendering to console applications. Built with simplicity in mind, it provides templates and straightforward APIs to help you create visualizations efficiently. While the core is written in C and C++, the engine is structured to be approachable even for those new to graphics programming.
