@@ -2,15 +2,17 @@
 
 # Dolphin3D Extra Pack
 
-**A graphics engine for console and window 3D rendering**  
+**A graphics engine for console 3D rendering (+ window rendering!)**  
 *Version: v1.0 (currently in development)*
 
 Dolphin3D is an open-source framework designed to bring accessible 3D rendering to console applications. Built with simplicity in mind, it provides templates and straightforward APIs to help you create visualizations efficiently. While the core is written in C and C++, the engine is structured to be approachable even for those new to graphics programming.
 
 What sets Dolphin3D apart is its **experimental nature**—it challenges conventional engine design to offer a unique, streamlined experience. This makes it especially suitable for **beginners** looking to explore 3D rendering concepts in a manageable environment.
 
+This pack also features experimental windowed rendering. It doesn't use any third-party libraries, only WinAPI. But this mode is much more demanding on the computer hardware than the console one.
+
 ### Getting Started
-- Guides and documentation are available in the `_docs` folder.
+- Documentation are available in the `_docs` folder.
 - Please review the `license` file for terms of use.
 
 ---
