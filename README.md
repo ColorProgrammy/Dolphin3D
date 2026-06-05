@@ -8,7 +8,6 @@
 ![C++98/03](https://img.shields.io/badge/C%2B%2B-98%2F03-blue?logo=cplusplus&logoColor=white)
 ![Windows](https://img.shields.io/badge/Platform-Windows-0078D6?logo=windows&logoColor=white)
 ![Visual Studio 2008](https://img.shields.io/badge/Visual_Studio-2008-purple?logo=visualstudio&logoColor=white)
-![Last Commit](https://img.shields.io/github/last-commit/ColorProgrammy/Dolphin3D)
 ![Code Size](https://img.shields.io/github/languages/code-size/ColorProgrammy/Dolphin3D)
 ![License](https://img.shields.io/github/license/ColorProgrammy/Dolphin3D)
 
