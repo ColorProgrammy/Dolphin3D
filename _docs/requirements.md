@@ -3,8 +3,8 @@
 ## Minimum Requirements
 
 ### Operating System
-- **For running games:** Windows 95 (with proper configuration)
-- **For development:** Windows Vista with Service Pack 2
+- **For running games:** Windows 2000 (with proper configuration)
+- **For development:** Windows XP with Service Pack 2
 
 ### Storage
 - **50 MB** of free disk space
@@ -45,8 +45,8 @@ Dolphin3D performs all graphics calculations on the CPU, without GPU acceleratio
 - Integrated or discrete graphics cards do not affect rendering speed
 - Older systems require capable CPUs despite minimal OS requirements
 
-## Windows 95 Compatibility
-While theoretically compatible with Windows 95, practical use requires:
+## Windows 2000 Compatibility
+While theoretically compatible with Windows 2000, practical use requires:
 - CPU with adequate single-thread performance (Pentium 4 or better)
 - Proper application manifest configuration
 - Potential adjustments for legacy API support
