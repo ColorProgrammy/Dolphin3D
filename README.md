@@ -5,6 +5,14 @@
 **A graphics engine for console 3D rendering**  
 *Version: v1.0 (currently in development)*
 
+![C++98/03](https://img.shields.io/badge/C%2B%2B-98%2F03-blue?logo=cplusplus&logoColor=white)
+![Windows](https://img.shields.io/badge/Platform-Windows-0078D6?logo=windows&logoColor=white)
+![Visual Studio 2008](https://img.shields.io/badge/Visual_Studio-2008-purple?logo=visualstudio&logoColor=white)
+![Last Commit](https://img.shields.io/github/last-commit/ColorProgrammy/Dolphin3D)
+![Code Size](https://img.shields.io/github/languages/code-size/ColorProgrammy/Dolphin3D)
+![License](https://img.shields.io/github/license/ColorProgrammy/Dolphin3D)
+
+
 Dolphin3D is an open-source framework designed to bring accessible 3D rendering to console applications. Built with simplicity in mind, it provides templates and straightforward APIs to help you create visualizations efficiently. While the core is written in C and C++, the engine is structured to be approachable even for those new to graphics programming.
 
 What sets Dolphin3D apart is its **experimental nature**—it challenges conventional engine design to offer a unique, streamlined experience. This makes it especially suitable for **beginners** looking to explore 3D rendering concepts in a manageable environment.
