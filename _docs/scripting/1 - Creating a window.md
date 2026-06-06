@@ -43,6 +43,7 @@ int main() {
 
         for (int j = 0; j < height; ++j) {
             for (int i = 0; i < width; ++i) {
+                if(GetAsyncKeyState(VK_ESCAPE)) break;
                 float brightness = 0.5f;
 
                 vec2 uv = createUV(i, j, width, height);
@@ -123,14 +124,15 @@ std::vector<Light> lights;
 std::vector<Object*> objects;
 // Objects here
 ```
-Here you can add your own objects and lights. We'll cover these in another section.
+Here you can add your own objects and lights. We'll cover these in another section (4 - Objects and lights)
 
 ### Main loop
 ```cpp
 while (true) {
+    if(GetAsyncKeyState(VK_ESCAPE)) break;
     swapBuffers(currentBuffer, displayBuffer, width, height);
 ```
-And so we begin our loop. And yes, it's infinite. However, we'll be interrupting it when we exit, so everything's fine.
+And so we begin our loop. And yes, it's infinite. However, we'll be interrupting it when we exit, so everything's fine. We'll get to know keycodes later.
 
 `swapBuffer` exchanges the two buffers – the engine renders into `currentBuffer`, while `displayBuffer` is shown on screen. Prevents flickering (double buffering).
 
@@ -159,10 +161,31 @@ You don't need to understand this too much. The main thing to remember is that y
 setObjects(objects, ro, rd, hit, currentcolor, brightness, normal, lights, 0.4f, 7.0f);
 setColors(i, j, width, gradientSize, gradient, hit, currentcolor, brightness);
 ```
-setObjects iterates over all objects in objects and finds the closest intersection with the ray (ro, rd).
+`setObjects` iterates over all objects in objects and finds the closest intersection with the ray (`ro`, `rd`).
 
 If an intersection is found: hit = true, currentcolor and normal are set, and brightness is updated with lighting from lights.
 
-The last two arguments (0.4f, 7.0f) are ...
+The last two arguments (0.4f, 7.0f) are `shadow brightness and distance`.
 
-Since both objects and lights are empty, no intersection occurs → hit remains false
+Since both objects and lights are empty, no intersection occurs => `hit remains false`
+
+`setColors` writes a character and its color into the current __buffer__ at position (`i`, `j`).
+
+If hit == false (background), only brightness (here fixed at 0.5f) is used to pick a character from the gradient.
+
+If hit == true, the object's color and lighting are used.
+
+```cpp
+render(width, height, 30);
+```
+This command renders an image. The first and second arguments are the screen resolution, and the third is the __frame rate__.
+
+### Cleanup
+```cpp
+freeBuffers();
+freeObjects(objects);
+return 0;
+```
+So, we're coming to the end. When we press `ESC` on the keyboard, the loop will break, but we need to unload the buffers and objects before closing. After that, we can safely terminate the program with `return 0`.
+
+**Well, that's how windows are created in Dolphin3D!**
