@@ -1,6 +1,8 @@
-# Creating a window
+# 1 - Creating a window
 
 This guide walks you through a minimal window example that initializes the engine, sets up buffers, a gradient, an empty scene (no objects), and runs an infinite render loop.
+
+---
 
 ## Full Code
 
@@ -65,6 +67,10 @@ int main() {
 
 **Well then, let's get started!**
 
+---
+
+## Step-by-step explanation
+
 ### Headers
 ```cpp
 #include <iostream>
@@ -76,6 +82,8 @@ int main() {
 #include "../include/Dolphin3D.h"
 ```
 It's simple here. We're including the libraries we need for work, as well as our framework. It's important to note the `"../"` part because the folder is located within the project folder, so we'll need to navigate up the path.
+
+---
 
 ### Initialize the engine
 ```cpp
@@ -98,12 +106,16 @@ We optionally specify the screen resolution in characters (not pixels, this is i
 
 `system("cls")` – optional, clears system outputs during initialization.
 
+---
+
 ```cpp
 bool hit;
 Color currentcolor;
 vec3 normal;
 ```
-We initialize the necessary variables for rendering, we can’t do without them, yea
+We initialize the necessary variables for rendering, we can’t do without them, yea.
+
+---
 
 ```cpp
 const char* gradientName = GRADIENT_0;
@@ -116,6 +128,8 @@ Here we initialize the symbol gradient to simulate brightness. The built-in GRAD
 
 `setGradientSize(...)` – sets the gradient size for brightness to work properly
 
+---
+
 ### Objects and lights
 ```cpp
 std::vector<Light> lights;
@@ -126,6 +140,8 @@ std::vector<Object*> objects;
 ```
 Here you can add your own objects and lights. We'll cover these in another section (4 - Objects and lights)
 
+---
+
 ### Main loop
 ```cpp
 while (true) {
@@ -135,6 +151,8 @@ while (true) {
 And so we begin our loop. And yes, it's infinite. However, we'll be interrupting it when we exit, so everything's fine. We'll get to know keycodes later.
 
 `swapBuffer` exchanges the two buffers – the engine renders into `currentBuffer`, while `displayBuffer` is shown on screen. Prevents flickering (double buffering).
+
+---
 
 ```cpp
 for (int j = 0; j < height; ++j) {
@@ -157,6 +175,8 @@ Outer loop over rows (`j`), inner loop over columns (`i`). For each screen posit
 
 You don't need to understand this too much. The main thing to remember is that you can change the camera's position (using `ray origin`).
 
+---
+
 ```cpp
 setObjects(objects, ro, rd, hit, currentcolor, brightness, normal, lights, 0.4f, 7.0f);
 setColors(i, j, width, gradientSize, gradient, hit, currentcolor, brightness);
@@ -175,10 +195,14 @@ If hit == false (background), only brightness (here fixed at 0.5f) is used to pi
 
 If hit == true, the object's color and lighting are used.
 
+---
+
 ```cpp
 render(width, height, 30);
 ```
 This command renders an image. The first and second arguments are the screen resolution, and the third is the __frame rate__.
+
+---
 
 ### Cleanup
 ```cpp
@@ -187,5 +211,7 @@ freeObjects(objects);
 return 0;
 ```
 So, we're coming to the end. When we press `ESC` on the keyboard, the loop will break, but we need to unload the buffers and objects before closing. After that, we can safely terminate the program with `return 0`.
+
+---
 
 **Well, that's how windows are created in Dolphin3D!**
